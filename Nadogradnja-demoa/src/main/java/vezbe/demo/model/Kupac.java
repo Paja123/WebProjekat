@@ -23,6 +23,12 @@ public class Kupac extends Korisnik implements Serializable {
         this.tipKupca =tipKupca ;
     }
 
+    public Kupac(String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja){
+        super(korisnickoIme, lozinka, ime, prezime, pol,datumRodjenja, Uloga.Kupac);
+        this.bodovi = 0;
+        this.tipKupca = null;
+    }
+
     public Kupac() {
 
     }
