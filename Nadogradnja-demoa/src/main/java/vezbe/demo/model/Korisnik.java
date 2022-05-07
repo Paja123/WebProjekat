@@ -43,7 +43,13 @@ public  class Korisnik implements Serializable {
 
     public Korisnik() {
     }
-
+    public Korisnik(String username, String password, String ime, String prezime) {
+        this.korisnickoIme = korisnickoIme;
+        this.lozinka = lozinka;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.uloga = Uloga.Admin;
+    }
 
     public String getKorisnickoIme() {
         return korisnickoIme;

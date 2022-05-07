@@ -1,5 +1,6 @@
 package vezbe.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class Porudzbina implements Serializable {
     @JoinColumn(name = "porudzbina_id")
     private Set<StavkaPorudzbine> poruceniArtikli = new HashSet<>();
     @ManyToOne
+    @JsonIgnore
     private Restoran restoran;
 
     @Column(name = "datum_i_vreme")

@@ -17,7 +17,7 @@ public class Restoran implements Serializable {
     @Column(nullable = false)
     private String tipRestorana;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "restoran_id")
     private Set<Artikal> ponuda = new HashSet<>();
 

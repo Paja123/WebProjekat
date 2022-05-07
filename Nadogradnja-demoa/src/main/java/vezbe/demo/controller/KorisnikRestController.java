@@ -26,8 +26,10 @@ public class KorisnikRestController {
         Korisnik loggedKorisnik = korisnikService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
         if (loggedKorisnik == null)
             return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.NOT_FOUND);
-        Korisnik prijavljeniKorisnik  = korisnikService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
+
         session.setAttribute("logovaniKorsinik", loggedKorisnik);
+
+        Korisnik prijavljeniKorisnik  = korisnikService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
 
 
         return ResponseEntity.ok("Uspesno prijavljivanje!");
@@ -44,6 +46,17 @@ public class KorisnikRestController {
             System.out.println(loggedKorisnik);
         }
         return ResponseEntity.ok(loggedKorisnik);
+
+    }
+    @GetMapping("/api/korisnici")
+    public ResponseEntity<List<Korisnik>> getSveKorisnike(HttpSession session){
+        List<Korisnik> listaKorisnika = new ArrayList<>();
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
+        if(loggedKorisnik.getUloga()!=Uloga.Admin){
+            return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
+        }
+        listaKorisnika =  korisnikService.findAll();
+        return ResponseEntity.ok(listaKorisnika);
 
     }
 }

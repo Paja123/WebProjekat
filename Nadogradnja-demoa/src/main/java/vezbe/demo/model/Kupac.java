@@ -1,5 +1,7 @@
 package vezbe.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import java.util.Date;
 public class Kupac extends Korisnik implements Serializable {
     @Column(name = "porudzbina_id")
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy="kupac")
+    @JsonIgnore
     private Set<Porudzbina> listaPorudzbina = new HashSet<>();
     private int bodovi;
     @OneToOne

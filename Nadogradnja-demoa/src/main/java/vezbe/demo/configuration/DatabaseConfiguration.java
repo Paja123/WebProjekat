@@ -226,6 +226,9 @@ public class DatabaseConfiguration {
         komentarRepository.save(komentar);
         Komentar komentar2 = new Komentar(kupac, restoran2, "Me likey, very nice", 5);
         komentarRepository.save(komentar2);
+
+        Korisnik admin = new Korisnik("admin", "sifra", "Admin", "Adminovski" , Pol.muski,new Date(101, Calendar.SEPTEMBER, 10), Uloga.Admin);
+        korisnikRepository.save(admin);
         /*Department department1 = new Department("first department");
         Department department2 = new Department("second department");
 

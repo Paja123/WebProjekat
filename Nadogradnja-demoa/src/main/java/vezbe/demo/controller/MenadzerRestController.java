@@ -1,16 +1,18 @@
 package vezbe.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vezbe.demo.dto.MenadzerDto;
-import vezbe.demo.model.Menadzer;
-import vezbe.demo.model.Pol;
+import vezbe.demo.model.*;
 import vezbe.demo.service.MenadzerService;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @RestController
 public class MenadzerRestController {
@@ -35,13 +37,29 @@ public class MenadzerRestController {
         return ResponseEntity.ok("Uspesno kreiranje menadzera!");
 
     }
-    //  @PostMapping("/api/registracija")
-   /* public ResponseEntity<String> registracija(@RequestBody KupacDto kupacDto){
+    @GetMapping("/api/pregledRestorana")
+    public ResponseEntity<Restoran> getRestoran(HttpSession session){
+
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
+        if(loggedKorisnik.getUloga()!= Uloga.Menadzer){
+            return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
+        }
+        Restoran restoran =  menadzerService.findRestoran(loggedKorisnik.getId());
+        return ResponseEntity.ok(restoran);
+
+    }
+/*    @GetMapping("/api/pregledPorudzbina")
+    public ResponseEntity<List<Porudzbina>> getPorudzbine(HttpSession session){
+        List<Porudzbina> listaPorudzbina = new ArrayList<>();
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
+        if(loggedKorisnik.getUloga()!= Uloga.Menadzer){
+            return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
+        }
+        Restoran restoran =  menadzerService.findRestoran(loggedKorisnik.getId());
 
 
-        return ResponseEntity.ok("Successfully logged in!");
-    }*/
-
+    }
+*/
 
 
 /*    @GetMapping("/api/kupci")

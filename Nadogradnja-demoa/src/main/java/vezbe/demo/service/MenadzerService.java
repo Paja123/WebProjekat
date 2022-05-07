@@ -2,8 +2,7 @@ package vezbe.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vezbe.demo.model.Kupac;
-import vezbe.demo.model.Menadzer;
+import vezbe.demo.model.*;
 import vezbe.demo.repository.MenadzerRepository;
 
 import java.util.List;
@@ -32,4 +31,20 @@ public class MenadzerService {
     }
 
     public void delete(Menadzer menadzer){menadzerRepository.delete(menadzer);}
+
+    public Restoran findRestoran(Long ID){
+        for(Menadzer menadzer: menadzerRepository.findAll()){
+            if(menadzer.getId().equals(ID)){
+                return menadzer.getRestoran();
+
+            }
+        }
+        return null;
+    }
+   /* public List<Porudzbina> findPorudzbine(Long ID){
+        Restoran r = findRestoran(ID);
+        for(Artikal artikal: r.getPonuda()){
+            for()
+        }
+    }*/
 }
