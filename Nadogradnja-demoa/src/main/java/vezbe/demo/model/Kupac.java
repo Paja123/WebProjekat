@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 public class Kupac extends Korisnik implements Serializable {
     @Column(name = "porudzbina_id")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="kupac")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy="kupac")
     private Set<Porudzbina> listaPorudzbina = new HashSet<>();
     private int bodovi;
     @OneToOne

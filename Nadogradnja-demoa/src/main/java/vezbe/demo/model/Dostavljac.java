@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity
 public class Dostavljac extends Korisnik implements Serializable {
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name ="dostavljac_id")
     private Set<Porudzbina> porudzbineZaDostavu= new HashSet<>();
 

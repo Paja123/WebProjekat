@@ -1,16 +1,17 @@
 package vezbe.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import vezbe.demo.dto.KupacDto;
-import vezbe.demo.model.Kupac;
-import vezbe.demo.model.Pol;
-import vezbe.demo.model.Uloga;
+import vezbe.demo.dto.LoginDto;
+import vezbe.demo.model.*;
 import vezbe.demo.service.KupacService;
 
 
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -43,12 +44,8 @@ public class KupacRestController {
         return ResponseEntity.ok("Uspesna registracija!");
 
     }
-  //  @PostMapping("/api/registracija")
-   /* public ResponseEntity<String> registracija(@RequestBody KupacDto kupacDto){
 
 
-        return ResponseEntity.ok("Successfully logged in!");
-    }*/
 
 
 
