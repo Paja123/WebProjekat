@@ -16,6 +16,10 @@ public class Dostavljac extends Korisnik implements Serializable {
         super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, Uloga.Dostavljac);
         this.porudzbineZaDostavu = porudzbineZaDostavu;
     }
+    public Dostavljac(String korisnickoIme, String lozinka, String ime, String prezime, Pol pol, Date datumRodjenja) {
+        super(korisnickoIme, lozinka, ime, prezime, pol, datumRodjenja, Uloga.Dostavljac);
+        this.porudzbineZaDostavu = new HashSet<>();
+    }
 
     public Dostavljac() {
         super();

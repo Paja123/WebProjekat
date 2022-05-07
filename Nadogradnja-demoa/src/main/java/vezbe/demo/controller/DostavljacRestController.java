@@ -2,48 +2,43 @@ package vezbe.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import vezbe.demo.dto.KupacDto;
-import vezbe.demo.model.Kupac;
+import vezbe.demo.dto.DostavljacDto;
+import vezbe.demo.dto.MenadzerDto;
+import vezbe.demo.model.Dostavljac;
+import vezbe.demo.model.Menadzer;
 import vezbe.demo.model.Pol;
-import vezbe.demo.model.Uloga;
-import vezbe.demo.service.KupacService;
-
-
+import vezbe.demo.service.DostavljacService;
+import vezbe.demo.service.MenadzerService;
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
 @RestController
-public class KupacRestController {
+public class DostavljacRestController {
 
     @Autowired
-    private KupacService kupacService;
+    private DostavljacService dostavljacService;
 
-    @GetMapping("/api/")
-    public String welcome(){
-        return "Hello from api!";
-    }
 
     //TREBA DODATI DA LI JE NA SESIJI ADMIN, AKO NIJE ONDA NEKI BAD REQUEST
-    @PostMapping("/api/registracija")
-    public ResponseEntity<String> registracija(@RequestBody KupacDto kupacDto) throws ParseException {
+    @PostMapping("/api/kreirajDostavljaca")
+    public ResponseEntity<String> kreirajDostavljaca(@RequestBody DostavljacDto dostavljacDto) throws ParseException {
 
-        String sDate1=kupacDto.getDatumRodjenja();
+        String sDate1=dostavljacDto.getDatumRodjenja();
         Date date1= null;
         date1 = new SimpleDateFormat("yyyy/dd/MM").parse(sDate1);
 
-        Pol pol = Pol.valueOf(kupacDto.getPol());
+        Pol pol = Pol.valueOf(dostavljacDto.getPol());
 
-        Kupac kupac  = new Kupac(kupacDto.getKorisnickoIme(), kupacDto.getLozinka(), kupacDto.getIme(), kupacDto.getPrezime(),pol, date1);
-        this.kupacService.save(kupac);
+        Dostavljac dostavljac  = new Dostavljac(dostavljacDto.getKorisnickoIme(), dostavljacDto.getLozinka(), dostavljacDto.getIme(), dostavljacDto.getPrezime(),pol, date1);
+        this.dostavljacService.save(dostavljac);
 
-        return ResponseEntity.ok("Uspesna registracija!");
+        return ResponseEntity.ok("Uspesno kreiranje dostavljaca!");
 
     }
-  //  @PostMapping("/api/registracija")
+    //  @PostMapping("/api/registracija")
    /* public ResponseEntity<String> registracija(@RequestBody KupacDto kupacDto){
 
 

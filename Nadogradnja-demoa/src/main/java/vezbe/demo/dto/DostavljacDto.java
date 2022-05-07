@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static javax.persistence.EnumType.STRING;
 
-public class KupacDto {
+public class DostavljacDto {
 
     private Long id;
 
@@ -30,11 +30,11 @@ public class KupacDto {
 
     private Uloga uloga;
 
-    public KupacDto(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String pol, String datumRodjenja) {
+    public DostavljacDto(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String pol, String datumRodjenja) {
 
         this.uloga = Uloga.Kupac;
     }
-    public KupacDto(Kupac kupac) {
+    public DostavljacDto(Kupac kupac) {
         this.id = kupac.getId();
         this.korisnickoIme = kupac.getKorisnickoIme();
         this.lozinka = kupac.getLozinka();
@@ -45,7 +45,7 @@ public class KupacDto {
         this.uloga = Uloga.Kupac;
     }
 
-    public KupacDto() {
+    public DostavljacDto() {
     }
 
     public Long getId() {
