@@ -1,13 +1,12 @@
 package vezbe.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vezbe.demo.dto.DostavljacDto;
 import vezbe.demo.dto.MenadzerDto;
-import vezbe.demo.model.Dostavljac;
-import vezbe.demo.model.Menadzer;
-import vezbe.demo.model.Pol;
+import vezbe.demo.model.*;
 import vezbe.demo.service.DostavljacService;
 import vezbe.demo.service.MenadzerService;
 import javax.servlet.http.HttpSession;
@@ -22,10 +21,16 @@ public class DostavljacRestController {
     private DostavljacService dostavljacService;
 
 
-    //TREBA DODATI DA LI JE NA SESIJI ADMIN, AKO NIJE ONDA NEKI BAD REQUEST
+    //TREBA DODATI DA LI JE NA SESIJI ADMIN, AKO NIJE ONDA NEKI BAD REQUEST, TO SAM DODAO SAD
     @PostMapping("/api/kreirajDostavljaca")
-    public ResponseEntity<String> kreirajDostavljaca(@RequestBody DostavljacDto dostavljacDto) throws ParseException {
-
+    public ResponseEntity<String> kreirajDostavljaca(@RequestBody DostavljacDto dostavljacDto, HttpSession session) throws ParseException {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
+        if (loggedKorisnik == null){
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+        }
+        if(loggedKorisnik.getUloga()!= Uloga.Admin){
+            return new ResponseEntity("Nemate dozvolu za ovu funkciju", HttpStatus.BAD_REQUEST);
+        }
         String sDate1=dostavljacDto.getDatumRodjenja();
         Date date1= null;
         date1 = new SimpleDateFormat("yyyy/dd/MM").parse(sDate1);

@@ -41,6 +41,11 @@ public class Restoran implements Serializable {
         this.lokacija = lokacija;
     }
 
+    public Restoran(String naziv, String tipRestorana) {
+        this.naziv = naziv;
+        this.tipRestorana = tipRestorana;
+    }
+
     public Long getId() {
         return id;
     }

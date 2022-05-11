@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import vezbe.demo.model.*;
 import vezbe.demo.repository.MenadzerRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,10 +42,31 @@ public class MenadzerService {
         }
         return null;
     }
-   /* public List<Porudzbina> findPorudzbine(Long ID){
-        Restoran r = findRestoran(ID);
-        for(Artikal artikal: r.getPonuda()){
-            for()
+    public List<Artikal> removeArtikal(Long id, Restoran restoran) {
+        Artikal a= null;
+        for(Artikal artikal: restoran.getPonuda()){
+            if(artikal.getId().equals(id)){
+                 a = artikal;
+                 break;
+            }
         }
-    }*/
+        restoran.getPonuda().remove(a);
+        List<Artikal> l= new ArrayList<>();
+        for(Artikal artikal:restoran.getPonuda()){
+            l.add(artikal);
+        }
+        return l;
+    }
+    public Menadzer postaviNovogMenadzera(String korisnickoIme, Restoran restoran){
+            Menadzer m = null;
+            for(Menadzer menadzer: menadzerRepository.findAll()){
+                if(menadzer.getKorisnickoIme().equals(korisnickoIme)){
+                    m  = menadzer;
+                }
+            }
+            m.setRestoran(restoran);
+            menadzerRepository.save(m);
+            return m;
+    }
+
 }

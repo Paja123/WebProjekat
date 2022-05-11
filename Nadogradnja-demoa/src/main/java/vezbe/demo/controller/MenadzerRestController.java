@@ -23,7 +23,15 @@ public class MenadzerRestController {
 
 
     @PostMapping("/api/kreirajMenadzera")
-    public ResponseEntity<String> kreirajMenadzera(@RequestBody MenadzerDto menadzerDto) throws ParseException {
+    public ResponseEntity<String> kreirajMenadzera(@RequestBody MenadzerDto menadzerDto, HttpSession session) throws ParseException {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
+
+        if (loggedKorisnik == null){
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+        }
+        if(loggedKorisnik.getUloga()!= Uloga.Admin){
+            return new ResponseEntity("Nemate dozvolu za ovu funkciju", HttpStatus.BAD_REQUEST);
+        }
 
         String sDate1=menadzerDto.getDatumRodjenja();
         Date date1= null;
@@ -44,47 +52,27 @@ public class MenadzerRestController {
         if(loggedKorisnik.getUloga()!= Uloga.Menadzer){
             return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
         }
+
         Restoran restoran =  menadzerService.findRestoran(loggedKorisnik.getId());
         return ResponseEntity.ok(restoran);
 
     }
-/*    @GetMapping("/api/pregledPorudzbina")
-    public ResponseEntity<List<Porudzbina>> getPorudzbine(HttpSession session){
-        List<Porudzbina> listaPorudzbina = new ArrayList<>();
-        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
+    @DeleteMapping("/api/ukloniArtikal/{id}")
+    public ResponseEntity<List<Artikal>> ukloniArtikal(@PathVariable(name = "id") Long id, HttpSession session){
+        Menadzer loggedKorisnik = (Menadzer) session.getAttribute("logovaniKorsinik");
+
+        if(loggedKorisnik.getRestoran()== null){
+            return new ResponseEntity("ne mozes ovako loggedKorinsik", HttpStatus.BAD_REQUEST);
+        }
+
         if(loggedKorisnik.getUloga()!= Uloga.Menadzer){
             return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
         }
-        Restoran restoran =  menadzerService.findRestoran(loggedKorisnik.getId());
 
 
-    }
-*/
 
-
-/*    @GetMapping("/api/kupci")
-    public List<Kupac> getKupci(){
-        List<Kupac> kupacList = kupacService.findAll();
-
-        return kupacList;
+       List<Artikal> l =  menadzerService.removeArtikal(id, loggedKorisnik.getRestoran());
+        return ResponseEntity.ok(l);
     }
 
-    @GetMapping("/api/employees/{id}")
-    public Kupac getEmployee(@PathVariable(name = "id") Long id){
-        Kupac employee = employeeService.findOne(id);
-        return employee;
-    }
-
-    @PostMapping("/api/save-employee")
-    public String saveEmployee(@RequestBody Employee employee) {
-        this.employeeService.save(employee);
-        return "Successfully saved an employee!";
-    }
-    @GetMapping("/api/delById/{id}")
-    public String deleteEmployee(@PathVariable(name = "id") Long id){
-        Employee employee = employeeService.findOne(id);
-        this.employeeService.delete(employee);
-        return "Sucessfully deleted and employee!";
-    }
-*/
 }

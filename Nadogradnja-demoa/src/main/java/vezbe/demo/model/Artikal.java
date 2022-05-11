@@ -31,6 +31,12 @@ public class Artikal implements Serializable {
         this.opis = opis;
     }
 
+    public Artikal(String naziv, double cena, TipArtikla tipArtikla) {
+        this.naziv = naziv;
+        this.cena = cena;
+        this.tipArtikla = tipArtikla;
+    }
+
     public Long getId() {
         return id;
     }

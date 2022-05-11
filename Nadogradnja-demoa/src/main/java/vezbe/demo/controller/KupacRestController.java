@@ -23,12 +23,8 @@ public class KupacRestController {
     @Autowired
     private KupacService kupacService;
 
-    @GetMapping("/api/")
-    public String welcome(){
-        return "Hello from api!";
-    }
 
-    //TREBA DODATI DA LI JE NA SESIJI ADMIN, AKO NIJE ONDA NEKI BAD REQUEST
+
     @PostMapping("/api/registracija")
     public ResponseEntity<String> registracija(@RequestBody KupacDto kupacDto) throws ParseException {
 
