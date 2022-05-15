@@ -17,6 +17,8 @@ import java.util.Date;
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
+
 @RestController
 public class KupacRestController {
 
@@ -40,34 +42,22 @@ public class KupacRestController {
         return ResponseEntity.ok("Uspesna registracija!");
 
     }
+    @GetMapping("/api/svePorudzbine")
+    public ResponseEntity<Set<Porudzbina>> sveProduzbine(HttpSession session){
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
 
+        if (loggedKorisnik == null){
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+        }
+        if(loggedKorisnik.getUloga()!= Uloga.Kupac){
+            return new ResponseEntity("Nemate dozvolu za ovu funkciju", HttpStatus.BAD_REQUEST);
+        }
+        //Kupac kupac = (Kupac) loggedKorisnik;
+        if(kupacService.findAllPorudzbineByID(loggedKorisnik.getId()).isEmpty()){
+            System.out.println("PRAZNA LISTA");
+            ResponseEntity.noContent();
+        }
+        return ResponseEntity.ok( kupacService.findAllPorudzbineByID(loggedKorisnik.getId()));
 
-
-
-
-/*    @GetMapping("/api/kupci")
-    public List<Kupac> getKupci(){
-        List<Kupac> kupacList = kupacService.findAll();
-
-        return kupacList;
     }
-
-    @GetMapping("/api/employees/{id}")
-    public Kupac getEmployee(@PathVariable(name = "id") Long id){
-        Kupac employee = employeeService.findOne(id);
-        return employee;
-    }
-
-    @PostMapping("/api/save-employee")
-    public String saveEmployee(@RequestBody Employee employee) {
-        this.employeeService.save(employee);
-        return "Successfully saved an employee!";
-    }
-    @GetMapping("/api/delById/{id}")
-    public String deleteEmployee(@PathVariable(name = "id") Long id){
-        Employee employee = employeeService.findOne(id);
-        this.employeeService.delete(employee);
-        return "Sucessfully deleted and employee!";
-    }
-*/
 }

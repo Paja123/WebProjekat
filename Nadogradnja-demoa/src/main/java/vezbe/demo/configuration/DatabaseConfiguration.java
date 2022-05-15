@@ -180,6 +180,7 @@ public class DatabaseConfiguration {
         Kupac kupac2= new Kupac("korisnickoIme2", "lozinka2", "Predrag", "Nenadic",Pol.muski,new Date(100, Calendar.JANUARY, 10), novaListaPorudzbina, 1100, srebrni);
         kupacRepository.save(kupac2);
 
+
         Porudzbina porudzbina2 = new Porudzbina();
         porudzbina2.setPoruceniArtikli(lista_artikala2);
         porudzbina2.setRestoran(restoran);
@@ -188,10 +189,11 @@ public class DatabaseConfiguration {
         porudzbina2.setKupac(kupac2);
         porudzbina2.setStatus(StatusPorudzbine.UPripremi);
         porudzbinaRepository.save(porudzbina2);
+        kupacRepository.save(kupac2);
         kupac2.getListaPorudzbina().add(porudzbina2);
         Porudzbina porudzbina = new Porudzbina( lista_artikala, restoran, date1 , 123000,kupac2, StatusPorudzbine.UPripremi);
         porudzbinaRepository.save(porudzbina);
-
+        kupacRepository.save(kupac2);
         Date date = new Date();
         Menadzer menadzer = new Menadzer("menadzer123", "lozinka", "Milos", "Subotic", Pol.muski,date , restoran);
         menadzerRepository.save(menadzer);

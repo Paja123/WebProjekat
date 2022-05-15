@@ -33,6 +33,7 @@ public class Porudzbina implements Serializable {
     private double cena;
     @ManyToOne
     @JoinColumn(name = "kupac_id")
+    @JsonIgnore
     private Kupac kupac;
     @Enumerated(EnumType.STRING)
     private StatusPorudzbine statusPorudzbine;

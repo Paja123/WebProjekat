@@ -12,7 +12,6 @@ import java.util.Date;
 public class Kupac extends Korisnik implements Serializable {
     @Column(name = "porudzbina_id")
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy="kupac")
-    @JsonIgnore
     private Set<Porudzbina> listaPorudzbina = new HashSet<>();
     private int bodovi;
     @OneToOne

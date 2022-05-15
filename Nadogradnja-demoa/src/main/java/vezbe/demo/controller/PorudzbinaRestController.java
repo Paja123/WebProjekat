@@ -12,6 +12,7 @@ import vezbe.demo.service.PorudzbinaService;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class PorudzbinaRestController {
@@ -33,6 +34,6 @@ public class PorudzbinaRestController {
 
         return ResponseEntity.ok(listaPorudzbina);
 
-
     }
+
 }
