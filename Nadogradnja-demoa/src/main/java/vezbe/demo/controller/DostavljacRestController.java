@@ -11,8 +11,11 @@ import vezbe.demo.service.DostavljacService;
 import vezbe.demo.service.MenadzerService;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 public class DostavljacRestController {
@@ -21,7 +24,6 @@ public class DostavljacRestController {
     private DostavljacService dostavljacService;
 
 
-    //TREBA DODATI DA LI JE NA SESIJI ADMIN, AKO NIJE ONDA NEKI BAD REQUEST, TO SAM DODAO SAD
     @PostMapping("/api/kreirajDostavljaca")
     public ResponseEntity<String> kreirajDostavljaca(@RequestBody DostavljacDto dostavljacDto, HttpSession session) throws ParseException {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
@@ -43,38 +45,18 @@ public class DostavljacRestController {
         return ResponseEntity.ok("Uspesno kreiranje dostavljaca!");
 
     }
-    //  @PostMapping("/api/registracija")
-   /* public ResponseEntity<String> registracija(@RequestBody KupacDto kupacDto){
+
+    @GetMapping("/api/dostavljac/pregledPorudzbina")
+    public ResponseEntity<Set<Porudzbina>> pregledPorudzbina(HttpSession session) {
+
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
+        if (loggedKorisnik.getUloga() != Uloga.Dostavljac ) {//Da li treba dodati i mogucnost da admin moze da pristupa ovom edpointu
+            return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
+        }
 
 
-        return ResponseEntity.ok("Successfully logged in!");
-    }*/
 
+        return ResponseEntity.ok(dostavljacService.findAllById(loggedKorisnik.getId()));
 
-
-/*    @GetMapping("/api/kupci")
-    public List<Kupac> getKupci(){
-        List<Kupac> kupacList = kupacService.findAll();
-
-        return kupacList;
     }
-
-    @GetMapping("/api/employees/{id}")
-    public Kupac getEmployee(@PathVariable(name = "id") Long id){
-        Kupac employee = employeeService.findOne(id);
-        return employee;
-    }
-
-    @PostMapping("/api/save-employee")
-    public String saveEmployee(@RequestBody Employee employee) {
-        this.employeeService.save(employee);
-        return "Successfully saved an employee!";
-    }
-    @GetMapping("/api/delById/{id}")
-    public String deleteEmployee(@PathVariable(name = "id") Long id){
-        Employee employee = employeeService.findOne(id);
-        this.employeeService.delete(employee);
-        return "Sucessfully deleted and employee!";
-    }
-*/
 }
