@@ -191,7 +191,7 @@ public class DatabaseConfiguration {
         porudzbinaRepository.save(porudzbina2);
         kupacRepository.save(kupac2);
         kupac2.getListaPorudzbina().add(porudzbina2);
-        Porudzbina porudzbina = new Porudzbina( lista_artikala, restoran, date1 , 123000,kupac2, StatusPorudzbine.UPripremi);
+        Porudzbina porudzbina = new Porudzbina( lista_artikala, restoran, date1 , 123000,kupac2, StatusPorudzbine.CekaDostavljača);
         porudzbinaRepository.save(porudzbina);
         kupacRepository.save(kupac2);
         Date date = new Date();

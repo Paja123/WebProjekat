@@ -8,6 +8,7 @@ import vezbe.demo.repository.PorudzbinaRepository;
 import vezbe.demo.repository.StavkaPorudzbineRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +35,14 @@ public class PorudzbinaService {
         }
         return listaPorudzbina;
     }
-  
+  public Set<Porudzbina> findCekaDostavljaca(){
+        Set<Porudzbina> setp = new HashSet<>();
+        for(Porudzbina porudzbina: porudzbinaRepository.findAll()){
+            if(porudzbina.getStatus().equals(StatusPorudzbine.CekaDostavljača)){
+                setp.add(porudzbina);
+            }
+        }
+        return setp;
+  }
 }
 

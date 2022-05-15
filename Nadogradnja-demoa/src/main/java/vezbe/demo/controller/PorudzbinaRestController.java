@@ -36,4 +36,18 @@ public class PorudzbinaRestController {
 
     }
 
+    @GetMapping("/api/dostavljac/cekaDostavljaca")
+    public ResponseEntity<Set<Porudzbina>> porudzbineStanjeCekaDostavljaca(HttpSession session) {
+        List<Porudzbina> listaPorudzbina = new ArrayList<>();
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
+        if (loggedKorisnik.getUloga() != Uloga.Dostavljac) {
+            return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
+        }
+
+
+
+        return ResponseEntity.ok(porudzbinaService.findCekaDostavljaca());
+
+    }
+
 }
