@@ -38,5 +38,9 @@ public class KupacService {
     public Set<Porudzbina> findAllPorudzbineByID(Long id){
         return kupacRepository.getById(id).getListaPorudzbina();
     }
+    public void updateKupac(Kupac kupac, Porudzbina porudzbina){
+        kupac.getListaPorudzbina().add(porudzbina);
+        kupacRepository.save(kupac);
+    }
 
 }

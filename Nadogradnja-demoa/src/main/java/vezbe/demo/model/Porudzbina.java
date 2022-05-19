@@ -44,6 +44,7 @@ public class Porudzbina implements Serializable {
     }
 
     public Porudzbina() {
+        this.cena = 0;
     }
 
     public Porudzbina( Set<StavkaPorudzbine> poruceniArtikli, Restoran restoran, Date datumIVreme, long cena, Kupac kupac, StatusPorudzbine statusPorudzbine) {
@@ -53,6 +54,13 @@ public class Porudzbina implements Serializable {
         this.cena = cena;
         this.kupac =kupac;
         this.statusPorudzbine = statusPorudzbine;
+    }
+    public Porudzbina(Kupac kupac,Restoran restoran, StatusPorudzbine statusPorudzbine,Date datumIVreme) {
+        this.datumIVreme = datumIVreme;
+        this.statusPorudzbine = statusPorudzbine;
+        this.kupac = kupac;
+        this.restoran = restoran;
+        this.cena = 0;
     }
 
     public void setUUID(UUID id) {

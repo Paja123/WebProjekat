@@ -1,7 +1,5 @@
 package vezbe.demo.dto;
 
-import javax.persistence.Column;
-
 public class LokacijaDto {
     private double geoDuzina;
     private double geoSirina;

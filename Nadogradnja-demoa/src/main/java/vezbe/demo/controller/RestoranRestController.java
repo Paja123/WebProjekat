@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vezbe.demo.dto.ArtikalDto;
+import vezbe.demo.dto.KorpaDto;
 import vezbe.demo.dto.NoviMenadzerDto;
 import vezbe.demo.dto.RestoranDto;
 import vezbe.demo.model.*;
@@ -12,8 +13,7 @@ import vezbe.demo.service.ArtikalService;
 import vezbe.demo.service.RestoranService;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class RestoranRestController {
@@ -94,6 +94,7 @@ public class RestoranRestController {
 
         return ResponseEntity.ok(menadzer);
     }
+
 
 
 }
