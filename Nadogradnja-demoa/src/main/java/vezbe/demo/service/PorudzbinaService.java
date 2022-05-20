@@ -60,7 +60,7 @@ public class PorudzbinaService {
         Restoran restoran1 = restoranService.findByRestoranIme(restoran);
     //  Date date= null;
    //   date = new Date("yyyy/dd/MM");
-        Porudzbina porudzbina = new Porudzbina(kupac, restoran1, StatusPorudzbine.Obrada, new Date());
+        Porudzbina porudzbina = new Porudzbina(kupac, restoran1, StatusPorudzbine.USastavljanu, new Date());
         porudzbinaRepository.save(porudzbina);
         kupacService.updateKupac(kupac, porudzbina);
 
@@ -86,7 +86,7 @@ public class PorudzbinaService {
   public Porudzbina findByStatusAndKupac(Kupac kupac){
       Porudzbina p= null;
       for(Porudzbina porudzbina: kupac.getListaPorudzbina()){
-          if(porudzbina.getStatus().equals(StatusPorudzbine.Obrada)){
+          if(porudzbina.getStatus().equals(StatusPorudzbine.USastavljanu)){
               p = porudzbina;
           }
       }
@@ -134,6 +134,14 @@ public class PorudzbinaService {
         porudzbinaRepository.save(porudzbina);
 
         return  porudzbina;
+    }
+    public void  checkIfEmpty(Porudzbina porudzbina){
+        if(porudzbina.getPoruceniArtikli().isEmpty()){
+            porudzbinaRepository.delete(porudzbina);
+        }else{
+            porudzbina.setStatusPorudzbine(StatusPorudzbine.Obrada);
+            porudzbinaRepository.save(porudzbina);
+        }
     }
 }
 

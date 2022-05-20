@@ -99,9 +99,26 @@ public class PorudzbinaRestController {
 
         return ResponseEntity.ok(porudzbinaService.ukloniStavkuPorudzbine(korpaDto.getArtikal(), korpaDto.getKolicina(), porudzbina));
 
+    }
+    @PostMapping("/api/poruci")
+    public ResponseEntity<Porudzbina> poruci( HttpSession session) {
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
+        if (loggedKorisnik == null){
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+        }
+        if(loggedKorisnik.getUloga()!= Uloga.Kupac){
+            return new ResponseEntity("Nemate dozvolu za ovu funkciju", HttpStatus.BAD_REQUEST);
+        }
+        Kupac kupac =(Kupac) loggedKorisnik;
+        Porudzbina porudzbina = porudzbinaService.findByStatusAndKupac(kupac);
+        porudzbinaService.checkIfEmpty(porudzbina);
+        if(porudzbina.getPoruceniArtikli().isEmpty()){
+            return  new ResponseEntity("Porudzbina je prazna", HttpStatus.BAD_REQUEST);
+        }else{
+            return  ResponseEntity.ok(porudzbina);
+        }
 
     }
-
 
 
 
