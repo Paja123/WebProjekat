@@ -3,7 +3,10 @@ package vezbe.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 import vezbe.demo.dto.ArtikalDto;
 import vezbe.demo.dto.KorpaDto;
 import vezbe.demo.dto.NoviMenadzerDto;
@@ -13,6 +16,7 @@ import vezbe.demo.service.ArtikalService;
 import vezbe.demo.service.RestoranService;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -60,7 +64,7 @@ public class RestoranRestController {
         return ResponseEntity.ok(restoranService.findByLokacija(lokacija));
     }
     @PostMapping("/api/dodajArtikal")
-    public ResponseEntity<Set<Artikal>> dodajArtikal(@RequestBody ArtikalDto artikalDto, HttpSession session){
+    public ResponseEntity<Set<Artikal>> dodajArtikal(  @RequestParam("image") MultipartFile multipartFile,ArtikalDto artikalDto, HttpSession session) throws IOException {
         Menadzer loggedKorisnik = (Menadzer) session.getAttribute("logovaniKorsinik");
 
         if(loggedKorisnik.getRestoran()== null){
@@ -74,12 +78,23 @@ public class RestoranRestController {
 
         Artikal artikal  = new Artikal(artikalDto.getNaziv(), artikalDto.getCena(), tipArtikla);
 
-        Set<Artikal> l =  restoranService.dodajArtikal(artikal, loggedKorisnik.getRestoran());
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        artikal.setSlika(fileName);
+
+        //String uploadDir = "artikal-slike/" + artikal.getId();
+        String uploadDir = "src/main/resources/static/images/" + artikal.getId();
+
+        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
 
-        return ResponseEntity.ok(l);
+        Set<Artikal> listaArtikala =  restoranService.dodajArtikal(artikal, loggedKorisnik.getRestoran());
+
+
+        return ResponseEntity.ok(listaArtikala);
 
     }
+
+
     @PutMapping("/api/restoran/promeniMenadzera")
     public ResponseEntity<Menadzer> promeniMenadzera(@RequestBody NoviMenadzerDto dto, HttpSession session){
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
