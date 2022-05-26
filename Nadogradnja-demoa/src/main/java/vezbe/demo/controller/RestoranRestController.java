@@ -69,15 +69,26 @@ public class RestoranRestController {
         return ResponseEntity.ok(dto);
     }
     @PostMapping("/api/dodaj-artikal")
-    public ResponseEntity<Set<Artikal>> dodajArtikal(  @RequestParam("image") MultipartFile multipartFile,ArtikalDto artikalDto, HttpSession session) throws IOException {
+    public ResponseEntity<Set<Artikal>> dodajArtikal(@RequestParam("image") MultipartFile multipartFile,ArtikalDto artikalDto, HttpSession session) throws IOException {
         Menadzer loggedKorisnik = (Menadzer) session.getAttribute("logovaniKorsinik");
 
         if(loggedKorisnik.getRestoran()== null){
             return new ResponseEntity("ne mozes ovako loggedKorinsik", HttpStatus.BAD_REQUEST);
         }
-
         if(loggedKorisnik.getUloga()!= Uloga.Menadzer){
             return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
+        }
+        if(artikalDto.getNaziv().isEmpty()){
+            return new ResponseEntity("Polje naziv je obavezno!", HttpStatus.BAD_REQUEST);
+        }
+        if(artikalDto.getTipArtikla().isEmpty()){
+            return new ResponseEntity("Polje tipArtikla je obavezno!", HttpStatus.BAD_REQUEST);
+        }
+        if(artikalDto.getCena() == 0){
+            return new ResponseEntity("Polje cena je obavezno!", HttpStatus.BAD_REQUEST);
+        }
+        if(multipartFile.isEmpty()){
+            return new ResponseEntity("Polje slika je obavezno!", HttpStatus.BAD_REQUEST);
         }
         TipArtikla tipArtikla = TipArtikla.valueOf(artikalDto.getTipArtikla());
 
