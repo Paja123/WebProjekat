@@ -100,29 +100,5 @@ public class RestoranService {
         return r;
     }
 
-    /*public void dodajUPorudzbinu(StavkaPorudzbine stavkaPorudzbine, Porudzbina porudzbina){
-        porudzbinaService.dodajStavku(stavkaPorudzbine, porudzbina);
-
-
-    }
-
-    public void saveStavkaPorudzbine(StavkaPorudzbine stavkaPorudzbine){
-        stavkaPorudzbineService.saveStavka(stavkaPorudzbine);
-    }
-    public Artikal findArtikal(String nazivRestorana, String nazivArtikla, int kolicina){
-        Artikal a = null;
-        for(Restoran restoran: restoranRepository.findAll()){
-            if(restoran.getNaziv().equals(nazivRestorana)){
-                for(Artikal artikal: restoran.getPonuda()){
-                    if(artikal.getNaziv().equals(nazivArtikla)){
-                        a = artikal;
-                    }
-                }
-            }
-        }
-        stavkaPorudzbineService.addArtikal(a,kolicina);
-        return a;
-    }
-    */
 
 }

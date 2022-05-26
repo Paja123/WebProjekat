@@ -42,5 +42,10 @@ public class KupacService {
         kupac.getListaPorudzbina().add(porudzbina);
         kupacRepository.save(kupac);
     }
+    public void dodajBodove(double cena, Kupac kupac){
+        double noviBodovi = cena/1000 * 133;
+        kupac.setBodovi((int) (kupac.getBodovi() + noviBodovi));
+        kupacRepository.save(kupac);
+    }
 
 }

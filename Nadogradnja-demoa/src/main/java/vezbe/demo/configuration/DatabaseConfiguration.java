@@ -187,7 +187,7 @@ public class DatabaseConfiguration {
         porudzbina2.setDatumIVreme(date1);
         porudzbina2.setCena(10000);
         porudzbina2.setKupac(kupac2);
-        porudzbina2.setStatus(StatusPorudzbine.UPripremi);
+        porudzbina2.setStatus(StatusPorudzbine.Obrada);
         porudzbinaRepository.save(porudzbina2);
         kupacRepository.save(kupac2);
         kupac2.getListaPorudzbina().add(porudzbina2);

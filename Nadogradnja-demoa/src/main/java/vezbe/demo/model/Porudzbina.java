@@ -2,6 +2,7 @@ package vezbe.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,7 +22,7 @@ public class Porudzbina implements Serializable {
     @GeneratedValue(
             strategy = GenerationType.AUTO)
     private UUID id;
-    @OneToMany                                                              //ManyToMany nova klasa stavka pordurdzbine artikal i kolicina polja
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "porudzbina_id")
     private Set<StavkaPorudzbine> poruceniArtikli = new HashSet<>();
     @ManyToOne

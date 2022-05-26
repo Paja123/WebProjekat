@@ -1,13 +1,9 @@
 package vezbe.demo.service;
 
-import jdk.jshell.Snippet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vezbe.demo.model.*;
-import vezbe.demo.repository.KupacRepository;
 import vezbe.demo.repository.PorudzbinaRepository;
-
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -23,6 +19,9 @@ public class PorudzbinaService {
 
     @Autowired
     KupacService kupacService;
+
+    @Autowired
+    DostavljacService dostavljacService;
 
 
     public List<Porudzbina> getListaPorudzbina(Restoran restoran) {
@@ -56,12 +55,25 @@ public class PorudzbinaService {
         porudzbina.setPoruceniArtikli(lista);
         porudzbinaRepository.save(porudzbina);
   }
-  public void makePorudzbina(Kupac kupac, String restoran){//TREBA FORMATIRATI OVE DATUME KAD ZAVRSIS
-        Restoran restoran1 = restoranService.findByRestoranIme(restoran);
+  public void makePorudzbina(Kupac kupac, String restoranName){//TREBA FORMATIRATI OVE DATUME KAD ZAVRSIS
+        Restoran restoran = restoranService.findByRestoranIme(restoranName);
     //  Date date= null;
    //   date = new Date("yyyy/dd/MM");
-        Porudzbina porudzbina = new Porudzbina(kupac, restoran1, StatusPorudzbine.USastavljanu, new Date());
+       // Porudzbina porudzbina = new Porudzbina(kupac, restoran1, StatusPorudzbine.USastavljanu, new Date());
+      Porudzbina porudzbina = null;
+        for(Porudzbina porudzbina1: porudzbinaRepository.findAll()){
+            if(porudzbina1.getKupac().getId().equals(kupac.getId())){
+                for(Porudzbina p: kupac.getListaPorudzbina()){
+                    if(p.getStatusPorudzbine().equals(StatusPorudzbine.USastavljanu)){
+                        porudzbina = p;
+                        porudzbina.setRestoran(restoran);
+                        porudzbina.setDatumIVreme(new Date());
+                    }
+                }
+            }
+        }
         porudzbinaRepository.save(porudzbina);
+        restoranService.save(restoran);
         kupacService.updateKupac(kupac, porudzbina);
 
   }
@@ -83,7 +95,7 @@ public class PorudzbinaService {
         }
         return  p;
   }
-  public Porudzbina findByStatusAndKupac(Kupac kupac){
+  public Porudzbina findPorduzbinaUSastavljanju(Kupac kupac){
       Porudzbina p= null;
       for(Porudzbina porudzbina: kupac.getListaPorudzbina()){
           if(porudzbina.getStatus().equals(StatusPorudzbine.USastavljanu)){
@@ -143,5 +155,62 @@ public class PorudzbinaService {
             porudzbinaRepository.save(porudzbina);
         }
     }
+    public Porudzbina promeniStatusMenadzer(Restoran restoran, String ID){
+        Porudzbina p= null;
+        List<Porudzbina> listaPorudzbina = new ArrayList<>();
+        listaPorudzbina = porudzbinaRepository.findAll();
+        for(Porudzbina porudzbina: listaPorudzbina) {
+            String result = String.valueOf(porudzbina.getId());
+             result = result.replaceAll("[-+.^:,]",""); //UUID daje string sa crticama u njemu koje se ne vide u bazi
+
+            if (result.equals(ID)) {
+                if (porudzbina.getStatus().equals(StatusPorudzbine.Obrada)) {
+                    p = porudzbina;
+                    p.setStatusPorudzbine(StatusPorudzbine.UPripremi);
+                    porudzbinaRepository.save(p);
+                    restoranService.save(restoran);
+                    return p;
+                }else if(porudzbina.getStatus().equals(StatusPorudzbine.UPripremi)){
+                    p = porudzbina;
+                    p.setStatusPorudzbine(StatusPorudzbine.CekaDostavljača);
+                    porudzbinaRepository.save(p);
+                    restoranService.save(restoran);
+                    return p;
+                }
+            }
+        }
+     return p;
+    }
+    public Porudzbina promeniStatusDostavljac(Dostavljac dostavljac, String id){
+        List<Porudzbina> listaPorudzbina = new ArrayList<>();
+        Porudzbina p = null;
+        listaPorudzbina = porudzbinaRepository.findAll();
+        for(Porudzbina porudzbina: listaPorudzbina) {
+            if (porudzbina.getStatus().equals(StatusPorudzbine.CekaDostavljača)) {
+                p = porudzbina;
+                p.setStatusPorudzbine(StatusPorudzbine.UTransportu);
+                porudzbinaRepository.save(p);
+                dostavljac.getPorudzbineZaDostavu().add(p);
+                dostavljacService.save(dostavljac);
+                return p;
+            } else if (porudzbina.getStatus().equals(StatusPorudzbine.UTransportu)) {
+                for (Porudzbina porudzbina1 : dostavljacService.findAllById(dostavljac.getId())) {
+                    if (porudzbina1.getId().equals(porudzbina.getId())) {
+
+                        p = porudzbina;
+                        p.setStatusPorudzbine(StatusPorudzbine.Dostavljena);
+                        porudzbinaRepository.save(p);
+                        dostavljacService.save(dostavljac);
+                        kupacService.dodajBodove(porudzbina.getCena(), porudzbina.getKupac());
+
+                        return p;
+                    }
+                }
+            }
+        }
+        return p;
+    }
+
+
 }
 

@@ -50,8 +50,8 @@ public class PorudzbinaRestController {
         return ResponseEntity.ok(porudzbinaService.findCekaDostavljaca());
 
     }
-    @PostMapping("/api/kreiraj-porudzbinu")
-    public ResponseEntity<Porudzbina> kreirajPorudzbinu(@RequestBody RestoranImeDto restoranImeDto, HttpSession session){
+    @PostMapping("/api/izaberi-restoran")
+    public ResponseEntity<Porudzbina> izaberRestoran(@RequestBody RestoranImeDto restoranImeDto, HttpSession session){
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
         if (loggedKorisnik == null){
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
@@ -78,7 +78,7 @@ public class PorudzbinaRestController {
         }
         Kupac kupac =(Kupac) loggedKorisnik;
 
-        Porudzbina porudzbina = porudzbinaService.findByStatusAndKupac(kupac);
+        Porudzbina porudzbina = porudzbinaService.findPorduzbinaUSastavljanju(kupac);
 
         return ResponseEntity.ok(porudzbinaService.kreirajStavkuPorudzbine(korpaDto.getArtikal(), korpaDto.getKolicina(), porudzbina));
 
@@ -95,7 +95,7 @@ public class PorudzbinaRestController {
         }
         Kupac kupac =(Kupac) loggedKorisnik;
 
-        Porudzbina porudzbina = porudzbinaService.findByStatusAndKupac(kupac);
+        Porudzbina porudzbina = porudzbinaService.findPorduzbinaUSastavljanju(kupac);
 
         return ResponseEntity.ok(porudzbinaService.ukloniStavkuPorudzbine(korpaDto.getArtikal(), korpaDto.getKolicina(), porudzbina));
 
@@ -110,7 +110,7 @@ public class PorudzbinaRestController {
             return new ResponseEntity("Nemate dozvolu za ovu funkciju", HttpStatus.BAD_REQUEST);
         }
         Kupac kupac =(Kupac) loggedKorisnik;
-        Porudzbina porudzbina = porudzbinaService.findByStatusAndKupac(kupac);
+        Porudzbina porudzbina = porudzbinaService.findPorduzbinaUSastavljanju(kupac);
         porudzbinaService.checkIfEmpty(porudzbina);
         if(porudzbina.getPoruceniArtikli().isEmpty()){
             return  new ResponseEntity("Porudzbina je prazna", HttpStatus.BAD_REQUEST);
@@ -119,7 +119,43 @@ public class PorudzbinaRestController {
         }
 
     }
+    @PutMapping("/api/menadezer/promeni-status/{id}")
+    public ResponseEntity<Porudzbina> uPripremi(@PathVariable(name = "id") String id, HttpSession session){
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
+        if (loggedKorisnik == null){
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+        }
 
+        if(loggedKorisnik.getUloga()!= Uloga.Menadzer){
+            return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
+        }
+
+        Menadzer menadzer = (Menadzer) loggedKorisnik;
+        Porudzbina porudzbina = porudzbinaService.promeniStatusMenadzer(menadzer.getRestoran(), id);
+
+
+        return ResponseEntity.ok(porudzbina);
+    }
+    @PutMapping("/api/dostavljac/promeni-status/{id}")
+    public ResponseEntity<Porudzbina> uTransportu(@PathVariable(name = "id") String id, HttpSession session){
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
+        if (loggedKorisnik == null){
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+        }
+
+        if(loggedKorisnik.getUloga()!= Uloga.Dostavljac){
+            return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
+        }
+
+        Dostavljac dostavljac = (Dostavljac) loggedKorisnik;
+        Porudzbina porudzbina = porudzbinaService.promeniStatusDostavljac(dostavljac,id);
+        if(porudzbina==null){
+            return new ResponseEntity("Nemate pristup ovoj porudzbini", HttpStatus.BAD_REQUEST);
+        }
+
+
+        return ResponseEntity.ok(porudzbina);
+    }
 
 
 }
