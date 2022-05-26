@@ -148,11 +148,13 @@ public class PorudzbinaService {
         return  porudzbina;
     }
     public void  checkIfEmpty(Porudzbina porudzbina){
-        if(porudzbina.getPoruceniArtikli().isEmpty()){
-            porudzbinaRepository.delete(porudzbina);
-        }else{
+        Kupac kupac = porudzbina.getKupac();
+        if(!porudzbina.getPoruceniArtikli().isEmpty()){
             porudzbina.setStatusPorudzbine(StatusPorudzbine.Obrada);
+            Porudzbina porudzbina1 = new Porudzbina(StatusPorudzbine.USastavljanu, kupac);
+            kupac.getListaPorudzbina().add(porudzbina1);
             porudzbinaRepository.save(porudzbina);
+            kupacService.save(kupac);
         }
     }
     public Porudzbina promeniStatusMenadzer(Restoran restoran, String ID){

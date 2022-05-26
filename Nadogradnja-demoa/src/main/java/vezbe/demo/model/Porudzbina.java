@@ -47,6 +47,13 @@ public class Porudzbina implements Serializable {
     public Porudzbina() {
         this.cena = 0;
     }
+    public Porudzbina(StatusPorudzbine statusPorudzbine, Kupac kupac)
+    {
+        this.cena = 0;
+        this.statusPorudzbine = statusPorudzbine;
+        this.kupac = kupac;
+    }
+
 
     public Porudzbina( Set<StavkaPorudzbine> poruceniArtikli, Restoran restoran, Date datumIVreme, long cena, Kupac kupac, StatusPorudzbine statusPorudzbine) {
         this.poruceniArtikli = poruceniArtikli;
