@@ -3,6 +3,7 @@ package vezbe.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vezbe.demo.dto.KomentarDto;
+import vezbe.demo.dto.RestoranBasicInfoDto;
 import vezbe.demo.dto.RestoranDto;
 import vezbe.demo.dto.RestoranIspisDto;
 import vezbe.demo.model.*;
@@ -34,6 +35,15 @@ public class RestoranService {
     /*  @Autowired
       private PorudzbinaService porudzbinaService;
   */
+    public List<RestoranBasicInfoDto> getAllBasicInfo(){
+        List<RestoranBasicInfoDto> dtoList = new ArrayList<>();
+        for(Restoran restoran: restoranRepository.findAll()){
+
+            RestoranBasicInfoDto dto = new RestoranBasicInfoDto(restoran.getNaziv(), restoran.getTipRestorana(), restoran.getLokacija().getAdresa());
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
     public Restoran save(Restoran restoran) {
         return restoranRepository.save(restoran);
     }

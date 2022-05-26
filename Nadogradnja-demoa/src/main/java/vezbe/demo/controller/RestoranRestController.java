@@ -22,9 +22,9 @@ public class RestoranRestController {
 
 
     @GetMapping("/api")
-    public ResponseEntity<List<Restoran>> api(){
+    public ResponseEntity<List<RestoranBasicInfoDto>> api(){
 
-        return ResponseEntity.ok(restoranService.findAll());
+        return ResponseEntity.ok(restoranService.getAllBasicInfo());
     }
 
 
