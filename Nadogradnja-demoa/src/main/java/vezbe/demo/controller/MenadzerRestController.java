@@ -22,7 +22,7 @@ public class MenadzerRestController {
 
 
 
-    @PostMapping("/api/kreirajMenadzera")
+    @PostMapping("/api/kreiraj-menadzera")
     public ResponseEntity<String> kreirajMenadzera(@RequestBody MenadzerDto menadzerDto, HttpSession session) throws ParseException {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
 
@@ -45,7 +45,7 @@ public class MenadzerRestController {
         return ResponseEntity.ok("Uspesno kreiranje menadzera!");
 
     }
-    @GetMapping("/api/pregledRestorana")
+    @GetMapping("/api/pregled-restorana")
     public ResponseEntity<Restoran> getRestoran(HttpSession session){
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
@@ -57,7 +57,7 @@ public class MenadzerRestController {
         return ResponseEntity.ok(restoran);
 
     }
-    @DeleteMapping("/api/ukloniArtikal/{id}")
+    @DeleteMapping("/api/ukloni-artikal/{id}")
     public ResponseEntity<List<Artikal>> ukloniArtikal(@PathVariable(name = "id") Long id, HttpSession session){
         Menadzer loggedKorisnik = (Menadzer) session.getAttribute("logovaniKorsinik");
 

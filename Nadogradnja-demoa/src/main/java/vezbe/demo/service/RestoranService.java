@@ -2,7 +2,9 @@ package vezbe.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vezbe.demo.dto.KomentarDto;
 import vezbe.demo.dto.RestoranDto;
+import vezbe.demo.dto.RestoranIspisDto;
 import vezbe.demo.model.*;
 import vezbe.demo.repository.RestoranRepository;
 
@@ -24,6 +26,10 @@ public class RestoranService {
 
     @Autowired
     private StavkaPorudzbineService stavkaPorudzbineService;
+
+    @Autowired
+    private KomentarService komentarService;
+
 
     /*  @Autowired
       private PorudzbinaService porudzbinaService;
@@ -100,5 +106,20 @@ public class RestoranService {
         return r;
     }
 
-
+    public double getProsecnaOcena(Long restoranId){
+        return komentarService.getProsecnaOcena(restoranId);
+    }
+    public Set<KomentarDto> getKomentari(Long restoranId){
+        return komentarService.getByRestoran(restoranId);
+    }
+    public List<RestoranIspisDto> SpremiZaIspis(List<Restoran> listaRestorana){
+        List<RestoranIspisDto> ispisLista = new ArrayList<>();
+        for(Restoran restoran: listaRestorana){
+            double prosecnaOcena = getProsecnaOcena(restoran.getId());
+            Set<KomentarDto> komentari = getKomentari(restoran.getId());
+            RestoranIspisDto dto = new RestoranIspisDto(restoran.getNaziv(), restoran.getTipRestorana(), restoran.getLokacija(), prosecnaOcena, komentari, restoran.getPonuda());
+            ispisLista.add(dto);
+        }
+        return ispisLista;
+    }
 }

@@ -42,7 +42,7 @@ public class KupacRestController {
         return ResponseEntity.ok("Uspesna registracija!");
 
     }
-    @GetMapping("/api/svePorudzbine")
+    @GetMapping("/api/sve-porudzbine")
     public ResponseEntity<Set<Porudzbina>> sveProduzbine(HttpSession session){
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
 

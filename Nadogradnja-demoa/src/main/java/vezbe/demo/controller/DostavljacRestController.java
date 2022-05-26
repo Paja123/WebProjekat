@@ -24,7 +24,7 @@ public class DostavljacRestController {
     private DostavljacService dostavljacService;
 
 
-    @PostMapping("/api/kreirajDostavljaca")
+    @PostMapping("/api/kreiraj-dostavljaca")
     public ResponseEntity<String> kreirajDostavljaca(@RequestBody DostavljacDto dostavljacDto, HttpSession session) throws ParseException {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
         if (loggedKorisnik == null){
@@ -46,7 +46,7 @@ public class DostavljacRestController {
 
     }
 
-    @GetMapping("/api/dostavljac/pregledPorudzbina")
+    @GetMapping("/api/dostavljac/pregled-porudzbina")
     public ResponseEntity<Set<Porudzbina>> pregledPorudzbina(HttpSession session) {
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");

@@ -6,13 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.view.RedirectView;
-import vezbe.demo.dto.ArtikalDto;
-import vezbe.demo.dto.KorpaDto;
-import vezbe.demo.dto.NoviMenadzerDto;
-import vezbe.demo.dto.RestoranDto;
+import vezbe.demo.dto.*;
 import vezbe.demo.model.*;
-import vezbe.demo.service.ArtikalService;
 import vezbe.demo.service.RestoranService;
 
 import javax.servlet.http.HttpSession;
@@ -33,7 +28,7 @@ public class RestoranRestController {
     }
 
 
-    @PostMapping("/api/kreirajRestoran")
+    @PostMapping("/api/kreiraj-restoran")
     public ResponseEntity<String> kreirajRestoran(@RequestBody RestoranDto restoranDto, HttpSession session){
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
         if (loggedKorisnik == null){
@@ -49,21 +44,31 @@ public class RestoranRestController {
         return ResponseEntity.ok("Uspesno kreiranje restorana!");
     }
     @GetMapping("/api/{naziv}")
-    public ResponseEntity<Restoran> getRestoranByNaziv(@PathVariable(name = "naziv") String naziv){
+    public ResponseEntity<RestoranIspisDto> getRestoranByNaziv(@PathVariable(name = "naziv") String naziv){
+        Restoran restoran = restoranService.findByName(naziv);
+        double prosecnaOcena = restoranService.getProsecnaOcena(restoran.getId());
+        Set<KomentarDto> komentari = restoranService.getKomentari(restoran.getId());
+        RestoranIspisDto dto = new RestoranIspisDto(restoran.getNaziv(), restoran.getTipRestorana(), restoran.getLokacija(), prosecnaOcena, komentari, restoran.getPonuda());
 
-        return ResponseEntity.ok(restoranService.findByName(naziv));
+        return ResponseEntity.ok(dto);
     }
-    @GetMapping("/api/tipRestorana/{tipRestorana}")
-    public ResponseEntity<List<Restoran>> getRestoranByTipRestorana(@PathVariable(name = "tipRestorana") String tipRestorana){
+    @GetMapping("/api/tip-restorana/{tipRestorana}")
+    public ResponseEntity<List<RestoranIspisDto>> getRestoraniByTipRestorana(@PathVariable(name = "tipRestorana") String tipRestorana){
+        List<Restoran> listaRestorana  = restoranService.findByTip(tipRestorana);
+        List<RestoranIspisDto> ListaZaIspis  = restoranService.SpremiZaIspis(listaRestorana);
 
-        return ResponseEntity.ok(restoranService.findByTip(tipRestorana));
+        return ResponseEntity.ok(ListaZaIspis);
     }
-    @GetMapping("/api/lokacijaRestorana/{lokacija}")
-    public ResponseEntity<Restoran> getRestoranByLokacija(@PathVariable(name = "lokacija") String lokacija){
+    @GetMapping("/api/lokacija-restorana/{lokacija}")
+    public ResponseEntity<RestoranIspisDto> getRestoranByLokacija(@PathVariable(name = "lokacija") String lokacija){
+        Restoran restoran  = restoranService.findByLokacija(lokacija);
+        double prosecnaOcena = restoranService.getProsecnaOcena(restoran.getId());
+        Set<KomentarDto> komentari = restoranService.getKomentari(restoran.getId());
+        RestoranIspisDto dto = new RestoranIspisDto(restoran.getNaziv(), restoran.getTipRestorana(), restoran.getLokacija(), prosecnaOcena, komentari, restoran.getPonuda());
 
-        return ResponseEntity.ok(restoranService.findByLokacija(lokacija));
+        return ResponseEntity.ok(dto);
     }
-    @PostMapping("/api/dodajArtikal")
+    @PostMapping("/api/dodaj-artikal")
     public ResponseEntity<Set<Artikal>> dodajArtikal(  @RequestParam("image") MultipartFile multipartFile,ArtikalDto artikalDto, HttpSession session) throws IOException {
         Menadzer loggedKorisnik = (Menadzer) session.getAttribute("logovaniKorsinik");
 
@@ -95,7 +100,7 @@ public class RestoranRestController {
     }
 
 
-    @PutMapping("/api/restoran/promeniMenadzera")
+    @PutMapping("/api/restoran/promeni-menadzera")
     public ResponseEntity<Menadzer> promeniMenadzera(@RequestBody NoviMenadzerDto dto, HttpSession session){
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
         if (loggedKorisnik == null){

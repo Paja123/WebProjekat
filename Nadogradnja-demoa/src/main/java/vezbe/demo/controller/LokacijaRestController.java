@@ -21,7 +21,7 @@ public class LokacijaRestController {
     @Autowired
     private LokacijaService lokacijaService;
 
-    @PostMapping("/api/kreirajLokaciju")
+    @PostMapping("/api/kreiraj-lokaciju")
     public ResponseEntity<String> kreirajLokaciju(@RequestBody LokacijaDto lokacijaDto, HttpSession session){
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
         if (loggedKorisnik == null){
