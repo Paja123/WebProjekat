@@ -6,5 +6,6 @@ public enum StatusPorudzbine {
     CekaDostavljača,
     UTransportu,
     Dostavljena,
+    USastavljanu,
     Otkazana;
 }

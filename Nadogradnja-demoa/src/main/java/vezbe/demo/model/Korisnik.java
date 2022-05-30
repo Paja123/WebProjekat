@@ -8,7 +8,7 @@ import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Korisnik implements Serializable {
+public  class Korisnik implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +42,13 @@ public abstract class Korisnik implements Serializable {
     }
 
     public Korisnik() {
+    }
+    public Korisnik(String username, String password, String ime, String prezime) {
+        this.korisnickoIme = korisnickoIme;
+        this.lozinka = lozinka;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.uloga = Uloga.Admin;
     }
 
     public String getKorisnickoIme() {
@@ -107,4 +114,5 @@ public abstract class Korisnik implements Serializable {
     public void setUloga(Uloga uloga) {
         this.uloga = uloga;
     }
+
 }

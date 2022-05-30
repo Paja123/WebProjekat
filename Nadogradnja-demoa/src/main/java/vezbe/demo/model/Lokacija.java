@@ -9,7 +9,7 @@ public class Lokacija implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private double geoDuzina;
-    private double geoSirina;//double
+    private double geoSirina;
     @Column(nullable = false)
     private String adresa;
 

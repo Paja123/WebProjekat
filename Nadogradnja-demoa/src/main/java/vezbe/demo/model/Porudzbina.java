@@ -1,6 +1,8 @@
 package vezbe.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,10 +22,11 @@ public class Porudzbina implements Serializable {
     @GeneratedValue(
             strategy = GenerationType.AUTO)
     private UUID id;
-    @OneToMany                                                              //ManyToMany nova klasa stavka pordurdzbine artikal i kolicina polja
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "porudzbina_id")
     private Set<StavkaPorudzbine> poruceniArtikli = new HashSet<>();
     @ManyToOne
+    @JsonIgnore
     private Restoran restoran;
 
     @Column(name = "datum_i_vreme")
@@ -31,6 +34,7 @@ public class Porudzbina implements Serializable {
     private double cena;
     @ManyToOne
     @JoinColumn(name = "kupac_id")
+    @JsonIgnore
     private Kupac kupac;
     @Enumerated(EnumType.STRING)
     private StatusPorudzbine statusPorudzbine;
@@ -41,7 +45,15 @@ public class Porudzbina implements Serializable {
     }
 
     public Porudzbina() {
+        this.cena = 0;
     }
+    public Porudzbina(StatusPorudzbine statusPorudzbine, Kupac kupac)
+    {
+        this.cena = 0;
+        this.statusPorudzbine = statusPorudzbine;
+        this.kupac = kupac;
+    }
+
 
     public Porudzbina( Set<StavkaPorudzbine> poruceniArtikli, Restoran restoran, Date datumIVreme, long cena, Kupac kupac, StatusPorudzbine statusPorudzbine) {
         this.poruceniArtikli = poruceniArtikli;
@@ -50,6 +62,13 @@ public class Porudzbina implements Serializable {
         this.cena = cena;
         this.kupac =kupac;
         this.statusPorudzbine = statusPorudzbine;
+    }
+    public Porudzbina(Kupac kupac,Restoran restoran, StatusPorudzbine statusPorudzbine,Date datumIVreme) {
+        this.datumIVreme = datumIVreme;
+        this.statusPorudzbine = statusPorudzbine;
+        this.kupac = kupac;
+        this.restoran = restoran;
+        this.cena = 0;
     }
 
     public void setUUID(UUID id) {

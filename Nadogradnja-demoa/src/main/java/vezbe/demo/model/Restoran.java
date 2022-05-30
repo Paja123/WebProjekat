@@ -17,7 +17,7 @@ public class Restoran implements Serializable {
     @Column(nullable = false)
     private String tipRestorana;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "restoran_id")
     private Set<Artikal> ponuda = new HashSet<>();
 
@@ -39,6 +39,11 @@ public class Restoran implements Serializable {
         this.naziv = naziv;
         this.tipRestorana = tipRestorana;
         this.lokacija = lokacija;
+    }
+
+    public Restoran(String naziv, String tipRestorana) {
+        this.naziv = naziv;
+        this.tipRestorana = tipRestorana;
     }
 
     public Long getId() {
