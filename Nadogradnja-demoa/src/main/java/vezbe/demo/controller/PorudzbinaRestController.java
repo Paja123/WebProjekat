@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vezbe.demo.dto.LokacijaDto;
 import vezbe.demo.dto.RestoranImeDto;
 import vezbe.demo.model.*;
-import vezbe.demo.service.MenadzerService;
 import vezbe.demo.service.PorudzbinaService;
 import vezbe.demo.dto.KorpaDto;
 
@@ -37,7 +35,7 @@ public class PorudzbinaRestController {
 
     }
 
-    @GetMapping("/api/dostavljac/cekaDostavljaca")
+    @GetMapping("/api/dostavljac/ceka-dostavljaca")
     public ResponseEntity<Set<Porudzbina>> porudzbineStanjeCekaDostavljaca(HttpSession session) {
         List<Porudzbina> listaPorudzbina = new ArrayList<>();
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
@@ -119,7 +117,7 @@ public class PorudzbinaRestController {
         }
 
     }
-    @PutMapping("/api/menadezer/promeni-status/{id}")
+    @PutMapping("/api/menadezer/promeni-status/{id}")//GRESKA U KUCANJU
     public ResponseEntity<Porudzbina> uPripremi(@PathVariable(name = "id") String id, HttpSession session){
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
         if (loggedKorisnik == null){

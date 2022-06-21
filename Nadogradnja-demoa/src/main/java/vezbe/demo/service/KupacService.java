@@ -17,11 +17,13 @@ public class KupacService {
     private KupacRepository kupacRepository;
 
     public Kupac findOne(Long id){
-        Optional<Kupac> foundKupac = kupacRepository.findById(id);
-        if (foundKupac.isPresent())
-            return foundKupac.get();
-
-        return null;
+        Kupac k = null;
+        for(Kupac kupac: kupacRepository.findAll()){
+            if(kupac.getId().equals(id)){
+                k = kupac;
+            }
+        }
+        return k;
     }
 
     public List<Kupac> findAll(){

@@ -31,6 +31,9 @@ public class RestoranService {
     @Autowired
     private KomentarService komentarService;
 
+    @Autowired
+    private LokacijaService lokacijaService;
+
 
     /*  @Autowired
       private PorudzbinaService porudzbinaService;
@@ -45,6 +48,7 @@ public class RestoranService {
         return dtoList;
     }
     public Restoran save(Restoran restoran) {
+        lokacijaService.save(restoran.getLokacija());
         return restoranRepository.save(restoran);
     }
 

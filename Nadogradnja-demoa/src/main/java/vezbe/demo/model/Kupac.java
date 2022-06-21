@@ -62,7 +62,7 @@ public class Kupac extends Korisnik implements Serializable {
         Porudzbina porudzbina  = new Porudzbina();
         porudzbina.setKupac(Kupac.this);
         porudzbina.setStatusPorudzbine(StatusPorudzbine.USastavljanu);
-        this.getListaPorudzbina().add(porudzbina);
+        this.listaPorudzbina.add(porudzbina);
     }
 
     public int getBodovi() {

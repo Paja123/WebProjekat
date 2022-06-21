@@ -2,6 +2,7 @@ package vezbe.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +16,22 @@ import java.io.IOException;
 import java.util.*;
 
 @RestController
+@CrossOrigin("http://localhost:8080")
+@RequestMapping(value = "/api/")
 public class RestoranRestController {
 
+    private final RestoranService restoranService;
+
     @Autowired
-    private RestoranService restoranService;
+    public RestoranRestController(RestoranService restoranService) {
+        this.restoranService = restoranService;
+    }
 
 
-    @GetMapping("/api")
+    @GetMapping(
+            value = "/restorani",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<List<RestoranBasicInfoDto>> api(){
 
         return ResponseEntity.ok(restoranService.getAllBasicInfo());
@@ -39,6 +49,8 @@ public class RestoranRestController {
         }
 
         Restoran restoran  = new Restoran(restoranDto.getNaziv(), restoranDto.getTipRestorana());
+        Lokacija lokacija = new Lokacija(restoranDto.getGeoSirina(), restoranDto.getGeoDuzina(), restoranDto.getAdresa());
+        restoran.setLokacija(lokacija);
         this.restoranService.save(restoran);
 
         return ResponseEntity.ok("Uspesno kreiranje restorana!");
