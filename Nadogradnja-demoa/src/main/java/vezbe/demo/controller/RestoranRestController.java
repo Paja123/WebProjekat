@@ -55,31 +55,23 @@ public class RestoranRestController {
 
         return ResponseEntity.ok("Uspesno kreiranje restorana!");
     }
-    @GetMapping("/api/{naziv}")
-    public ResponseEntity<RestoranIspisDto> getRestoranByNaziv(@PathVariable(name = "naziv") String naziv){
-        Restoran restoran = restoranService.findByName(naziv);
+    
+    @GetMapping("/pretraga")
+    public ResponseEntity<Set<RestoranPretragaDto>> pretragaRestorana(@RequestBody String input){
+        Set<RestoranPretragaDto> restorani = restoranService.pronadjiRestorane(input);
+       return ResponseEntity.ok(restorani);
+
+    }
+
+    @GetMapping("/restorani/{id}")
+    public ResponseEntity<RestoranIspisDto> prikazJednogRestorana(@PathVariable(name = "id") Long id){
+        Restoran restoran = restoranService.findById(id);
         double prosecnaOcena = restoranService.getProsecnaOcena(restoran.getId());
         Set<KomentarDto> komentari = restoranService.getKomentari(restoran.getId());
-        RestoranIspisDto dto = new RestoranIspisDto(restoran.getNaziv(), restoran.getTipRestorana(), restoran.getLokacija(), prosecnaOcena, komentari, restoran.getPonuda());
 
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(restoranService.spremiZaIspis(restoran, prosecnaOcena, komentari)) ;
     }
-    @GetMapping("/api/tip-restorana/{tipRestorana}")
-    public ResponseEntity<List<RestoranIspisDto>> getRestoraniByTipRestorana(@PathVariable(name = "tipRestorana") String tipRestorana){
-        List<Restoran> listaRestorana  = restoranService.findByTip(tipRestorana);
-        List<RestoranIspisDto> ListaZaIspis  = restoranService.SpremiZaIspis(listaRestorana);
 
-        return ResponseEntity.ok(ListaZaIspis);
-    }
-    @GetMapping("/api/lokacija-restorana/{lokacija}")
-    public ResponseEntity<RestoranIspisDto> getRestoranByLokacija(@PathVariable(name = "lokacija") String lokacija){
-        Restoran restoran  = restoranService.findByLokacija(lokacija);
-        double prosecnaOcena = restoranService.getProsecnaOcena(restoran.getId());
-        Set<KomentarDto> komentari = restoranService.getKomentari(restoran.getId());
-        RestoranIspisDto dto = new RestoranIspisDto(restoran.getNaziv(), restoran.getTipRestorana(), restoran.getLokacija(), prosecnaOcena, komentari, restoran.getPonuda());
-
-        return ResponseEntity.ok(dto);
-    }
     @PostMapping("/api/dodaj-artikal")
     public ResponseEntity<Set<Artikal>> dodajArtikal(@RequestParam("image") MultipartFile multipartFile,ArtikalDto artikalDto, HttpSession session) throws IOException {
         Menadzer loggedKorisnik = (Menadzer) session.getAttribute("logovaniKorsinik");

@@ -4,15 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vezbe.demo.dto.KomentarDto;
 import vezbe.demo.dto.RestoranBasicInfoDto;
-import vezbe.demo.dto.RestoranDto;
 import vezbe.demo.dto.RestoranIspisDto;
+import vezbe.demo.dto.RestoranPretragaDto;
 import vezbe.demo.model.*;
 import vezbe.demo.repository.RestoranRepository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RestoranService {
@@ -55,8 +52,21 @@ public class RestoranService {
     public List<Restoran> findAll() {
         return restoranRepository.findAll();
     }
+    public RestoranIspisDto spremiZaIspis(Restoran restoran, double prosecnaOcena, Set<KomentarDto> komentari){
+        RestoranIspisDto dto = new RestoranIspisDto(restoran.getNaziv(), restoran.getTipRestorana(), restoran.getLokacija(), prosecnaOcena, komentari, restoran.getPonuda());
+        return dto;
+    }
 
-    ;
+    public Restoran findById(Long id){
+        Restoran r= null;
+        for(Restoran restoran: restoranRepository.findAll()){
+            if(restoran.getId().equals(id)){
+                r = restoran;
+            }
+        }
+        return r;
+    }
+
 
     public Restoran findByName(String naziv) {
         Restoran r = null;
@@ -135,5 +145,26 @@ public class RestoranService {
             ispisLista.add(dto);
         }
         return ispisLista;
+    }
+    public Set<RestoranPretragaDto> pronadjiRestorane(String input){
+        Set<RestoranPretragaDto> lista = new HashSet<>();
+        for(Restoran restoran: restoranRepository.findAll()){
+            if(input.contains(restoran.getNaziv())){
+                RestoranPretragaDto dto = new RestoranPretragaDto(restoran.getNaziv(), restoran.getTipRestorana(), restoran.getLokacija().getAdresa());
+                lista.add(dto);
+                continue;
+            }
+            if(input.contains(restoran.getTipRestorana())){
+                RestoranPretragaDto dto = new RestoranPretragaDto(restoran.getNaziv(), restoran.getTipRestorana(), restoran.getLokacija().getAdresa());
+                lista.add(dto);
+                continue;
+            }
+            if(input.contains(restoran.getLokacija().getAdresa())){
+                RestoranPretragaDto dto = new RestoranPretragaDto(restoran.getNaziv(), restoran.getTipRestorana(), restoran.getLokacija().getAdresa());
+                lista.add(dto);
+                continue;
+            }
+        }
+            return lista;
     }
 }
