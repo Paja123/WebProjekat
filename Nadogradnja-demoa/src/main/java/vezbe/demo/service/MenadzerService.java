@@ -42,21 +42,7 @@ public class MenadzerService {
         }
         return null;
     }
-    public List<Artikal> removeArtikal(Long id, Restoran restoran) {
-        Artikal a= null;
-        for(Artikal artikal: restoran.getPonuda()){
-            if(artikal.getId().equals(id)){
-                 a = artikal;
-                 break;
-            }
-        }
-        restoran.getPonuda().remove(a);
-        List<Artikal> l= new ArrayList<>();
-        for(Artikal artikal:restoran.getPonuda()){
-            l.add(artikal);
-        }
-        return l;
-    }
+
     public Menadzer postaviNovogMenadzera(String korisnickoIme, Restoran restoran){
             Menadzer m = null;
             for(Menadzer menadzer: menadzerRepository.findAll()){

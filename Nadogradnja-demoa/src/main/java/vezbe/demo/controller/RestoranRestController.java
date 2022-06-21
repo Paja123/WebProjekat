@@ -129,6 +129,47 @@ public class RestoranRestController {
 
         return ResponseEntity.ok(menadzer);
     }
+    @DeleteMapping("/ukloni-artikal/{id}")
+    public ResponseEntity<List<Artikal>> ukloniArtikal(@PathVariable(name = "id") Long id, HttpSession session){
+        Menadzer loggedKorisnik = (Menadzer) session.getAttribute("logovaniKorsinik");
+
+        if(loggedKorisnik.getRestoran()== null){
+            return new ResponseEntity("ne mozes ovako loggedKorinsik", HttpStatus.BAD_REQUEST);
+        }
+
+        if(loggedKorisnik.getUloga()!= Uloga.Menadzer){
+            return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
+        }
+        if(!restoranService.pronadjiArtikal(id, loggedKorisnik.getRestoran())){
+            return new ResponseEntity("U vasoj ponudi nema ovog artikla", HttpStatus.BAD_REQUEST);
+        }
+
+
+
+        List<Artikal> l =  restoranService.removeArtikal(id, loggedKorisnik.getRestoran());
+        return ResponseEntity.ok(l);
+    }
+    @PutMapping("/api/promeni-artikal/{id}")
+    public ResponseEntity<Artikal> promeniArtikal(@PathVariable(name = "id") Long id, @RequestBody Artikal artikal, HttpSession session){
+        Menadzer loggedKorisnik = (Menadzer) session.getAttribute("logovaniKorsinik");
+
+        if(loggedKorisnik.getRestoran()== null){
+            return new ResponseEntity("ne mozes ovako loggedKorinsik", HttpStatus.BAD_REQUEST);
+        }
+
+        if(loggedKorisnik.getUloga()!= Uloga.Menadzer){
+            return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
+        }
+        if(!restoranService.pronadjiArtikal(id, loggedKorisnik.getRestoran())){
+            return new ResponseEntity("U vasoj ponudi nema ovog artikla", HttpStatus.BAD_REQUEST);
+        }
+
+        //SLIKU NISI MENJAOOOOOOOOOOOOOOOOOOOOOOOOO
+        return ResponseEntity.ok(restoranService.promeniArtikal(artikal, loggedKorisnik.getRestoran(), id));
+
+    }
+
+
 
 
 

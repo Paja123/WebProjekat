@@ -57,22 +57,5 @@ public class MenadzerRestController {
         return ResponseEntity.ok(restoran);
 
     }
-    @DeleteMapping("/api/ukloni-artikal/{id}")
-    public ResponseEntity<List<Artikal>> ukloniArtikal(@PathVariable(name = "id") Long id, HttpSession session){
-        Menadzer loggedKorisnik = (Menadzer) session.getAttribute("logovaniKorsinik");
-
-        if(loggedKorisnik.getRestoran()== null){
-            return new ResponseEntity("ne mozes ovako loggedKorinsik", HttpStatus.BAD_REQUEST);
-        }
-
-        if(loggedKorisnik.getUloga()!= Uloga.Menadzer){
-            return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
-        }
-
-
-
-       List<Artikal> l =  menadzerService.removeArtikal(id, loggedKorisnik.getRestoran());
-        return ResponseEntity.ok(l);
-    }
 
 }

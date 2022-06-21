@@ -26,5 +26,18 @@ public class ArtikalService {
         }
 */
         return restoran.getPonuda();
+
+    }
+    public Artikal findById(Long id){
+        Artikal a = null;
+        for(Artikal artikal: artikalRepository.findAll()){
+            if(artikal.getId().equals(id)) {
+                a = artikal;
+            }
+        }
+        return  a;
+    }
+    public void save(Artikal artikal){
+        artikalRepository.save(artikal);
     }
 }

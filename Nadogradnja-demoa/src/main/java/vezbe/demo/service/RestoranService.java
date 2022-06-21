@@ -98,9 +98,7 @@ public class RestoranService {
         return r;
     }
 
-    public ArtikalService getArtikalService() {
-        return artikalService;
-    }
+
 
     public Set<Artikal> dodajArtikal(Artikal artikal, Restoran restoran) {
         Set<Artikal> novaLista = new HashSet<>();
@@ -167,4 +165,46 @@ public class RestoranService {
         }
             return lista;
     }
-}
+    public List<Artikal> removeArtikal(Long id, Restoran restoran) {
+        Artikal a = artikalService.findById(id);
+
+        restoran.getPonuda().remove(a);
+        restoranRepository.save(restoran);
+
+        List<Artikal> l= new ArrayList<>();
+        for(Artikal artikal:restoran.getPonuda()){
+            l.add(artikal);
+        }
+        return l;
+    }
+    public Artikal promeniArtikal(Artikal artikal, Restoran restoran,Long id){
+        Artikal stariArtikal = artikalService.findById(id);
+        if(!artikal.getNaziv().isEmpty()){
+            stariArtikal.setNaziv(artikal.getNaziv());
+        }
+        if(artikal.getTipArtikla()!=null){
+            stariArtikal.setTipArtikla(artikal.getTipArtikla());
+        }
+        if(artikal.getCena() != 0){
+            stariArtikal.setCena(artikal.getCena());
+        }
+        if(artikal.getKolicina()!= 0){
+            stariArtikal.setKolicina(artikal.getKolicina());
+        }
+        if(!artikal.getOpis().isEmpty()){
+            stariArtikal.setOpis(artikal.getOpis());
+        }
+        artikalService.save(stariArtikal);
+        restoranRepository.save(restoran);
+        return stariArtikal;
+
+        }
+        public Boolean pronadjiArtikal(Long id, Restoran restoran){
+            for(Artikal artikal: restoran.getPonuda()){
+                if(artikal.getId().equals(id)){
+                    return  true;
+                }
+            }
+            return  false;
+        }
+    }
