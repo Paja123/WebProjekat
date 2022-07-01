@@ -2,13 +2,16 @@ package vezbe.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import vezbe.demo.dto.KorisnikDto;
 import vezbe.demo.dto.KupacDto;
 import vezbe.demo.dto.LoginDto;
 import vezbe.demo.model.*;
 import vezbe.demo.service.KupacService;
+import vezbe.demo.service.RestoranService;
 
 
 import javax.servlet.http.HttpSession;
@@ -20,26 +23,39 @@ import java.util.Date;
 import java.util.Set;
 
 @RestController
+@CrossOrigin("http://localhost:8080")
+@RequestMapping(value = "/api/")
 public class KupacRestController {
 
+    private final KupacService kupacService;
+
     @Autowired
-    private KupacService kupacService;
+    public KupacRestController(KupacService kupacService) {
+        this.kupacService = kupacService;
+    }
 
 
 
-    @PostMapping("/api/registracija")
-    public ResponseEntity<String> registracija(@RequestBody KupacDto kupacDto) throws ParseException {
+    @PostMapping(
+            value = "/registracija",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> registracija(@RequestBody KorisnikDto korisnikDto) throws ParseException {
 
-        String sDate1=kupacDto.getDatumRodjenja();
+//        if(!kupacService.checkIfUsernameIsAvailable(korisnikDto.getKorisnickoIme())){
+//            return new ResponseEntity<>("korisnicko ime nije slobodno", HttpStatus.OK);
+//        }
+
+        String sDate1=korisnikDto.getDatumRodjenja();
         Date date1= null;
-        date1 = new SimpleDateFormat("yyyy/dd/MM").parse(sDate1);
+        date1 = new SimpleDateFormat("yyyy-MM-dd").parse(sDate1);
 
-        Pol pol = Pol.valueOf(kupacDto.getPol());
+        Pol pol = Pol.valueOf(korisnikDto.getPol());
 
-        Kupac kupac  = new Kupac(kupacDto.getKorisnickoIme(), kupacDto.getLozinka(), kupacDto.getIme(), kupacDto.getPrezime(),pol, date1);
+        Kupac kupac  = new Kupac(korisnikDto.getKorisnickoIme(), korisnikDto.getLozinka(), korisnikDto.getIme(), korisnikDto.getPrezime(),pol, date1);
         this.kupacService.save(kupac);
 
-        return ResponseEntity.ok("Uspesna registracija!");
+        return  new ResponseEntity<>("Uspesna registracija!", HttpStatus.OK);
 
     }
     @GetMapping("/api/sve-porudzbine")

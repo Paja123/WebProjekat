@@ -36,6 +36,15 @@ public class KupacService {
 
     public void delete(Kupac kupac){kupacRepository.delete(kupac);}
 
+    public boolean checkIfUsernameIsAvailable(String korisnickoIme){
+        for(Kupac kupac: kupacRepository.findAll()){
+            if(korisnickoIme.equals(kupac.getKorisnickoIme())){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public Set<Porudzbina> findAllPorudzbineByID(Long id){
         return kupacRepository.getById(id).getListaPorudzbina();
