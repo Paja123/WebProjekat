@@ -71,12 +71,13 @@ public class DatabaseConfiguration {
 
         tipKupcaRepository.saveAll(List.of(bronzani, srebrni, zlatni, platinum, dijamant));
 
-       Artikal artikal1 = new Artikal("naziv1", 123, TipArtikla.Jelo, 100, "opis1");
+       Artikal artikal1 = new Artikal("pica mala", 250, TipArtikla.Jelo, 100, "pica cipriciossa, 23cm, pelat, sir, šunka, šampinjoni ");
+       artikal1.setSlika("/src/main/resources/static/images/kapricoza.jpg");
 
        artikalRepository.save(artikal1);
-        Artikal artikal2 = new Artikal("naziv2", 321, TipArtikla.Pice, 210, "opis2");
+        Artikal artikal2 = new Artikal("pica normalna", 520, TipArtikla.Jelo, 210, "pica cipriciossa, 35cm, pelat, sir, šunka, šampinjoni");
         artikalRepository.save(artikal2);
-        Artikal artikal3 = new Artikal("naziv3", 500, TipArtikla.Jelo, 10, "opis3");
+        Artikal artikal3 = new Artikal("pica velika", 900, TipArtikla.Jelo, 100, "pica cipriciossa, 50cm, pelat, sir, šunka, šampinjoni");
         artikalRepository.save(artikal3);
         Artikal artikal4 = new Artikal("naziv4", 123, TipArtikla.Pice, 100, "opis4");
         artikalRepository.save(artikal4);

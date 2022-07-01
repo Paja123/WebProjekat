@@ -63,13 +63,18 @@ public class RestoranRestController {
 
     }
 
-    @GetMapping("/restorani/{id}")
-    public ResponseEntity<RestoranIspisDto> prikazJednogRestorana(@PathVariable(name = "id") Long id){
-        Restoran restoran = restoranService.findById(id);
+    @GetMapping(
+            value = "/restorani/{naziv}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<RestoranIspisDto> prikazJednogRestorana(@PathVariable(name = "naziv") String naziv){
+        Restoran restoran = restoranService.findByName(naziv);
         double prosecnaOcena = restoranService.getProsecnaOcena(restoran.getId());
         Set<KomentarDto> komentari = restoranService.getKomentari(restoran.getId());
+        if (restoran == null)
+            return new ResponseEntity<>(new RestoranIspisDto(), HttpStatus.OK);
 
-        return ResponseEntity.ok(restoranService.spremiZaIspis(restoran, prosecnaOcena, komentari)) ;
+        return new ResponseEntity<>(restoranService.spremiZaIspis(restoran, prosecnaOcena, komentari), HttpStatus.OK);
     }
 
     @PostMapping("/api/dodaj-artikal")

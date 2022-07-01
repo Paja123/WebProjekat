@@ -3,36 +3,47 @@ package vezbe.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vezbe.demo.dto.KorisnikDto;
 import vezbe.demo.dto.LoginDto;
 import vezbe.demo.model.*;
 import vezbe.demo.service.KorisnikService;
+import vezbe.demo.service.RestoranService;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/api/")
+@CrossOrigin(origins = "http://localhost:8080")
 public class KorisnikRestController {
-    @Autowired
-    private KorisnikService korisnikService;
+    private final KorisnikService korisnikService;
 
-    @PostMapping("/api/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session){
+    @Autowired
+    public KorisnikRestController(KorisnikService korisnikService) {
+        this.korisnikService = korisnikService;
+    }
+
+
+    @PostMapping(
+            value="login",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<KorisnikDto> login(@RequestBody KorisnikDto loginDto, HttpSession session) throws Exception{
         if(loginDto.getKorisnickoIme().isEmpty() || loginDto.getLozinka().isEmpty()){
-            return new ResponseEntity("Invalid login data", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new KorisnikDto(), HttpStatus.OK);
         }
         Korisnik loggedKorisnik = korisnikService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
         if (loggedKorisnik == null)
-            return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new KorisnikDto(), HttpStatus.OK);
 
         session.setAttribute("logovaniKorsinik", loggedKorisnik);
-
-        Korisnik prijavljeniKorisnik  = korisnikService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
-
-
-        return ResponseEntity.ok("Uspesno prijavljivanje!");
+        KorisnikDto korisnikDto= new KorisnikDto(loggedKorisnik.getKorisnickoIme(), loggedKorisnik.getLozinka(), loggedKorisnik.getIme(), loggedKorisnik.getPrezime(), loggedKorisnik.getDatumRodjenja(), loggedKorisnik.getPol(), loggedKorisnik.getUloga());
+        System.out.println(korisnikDto.getUloga());
+        return  new ResponseEntity<>(korisnikDto, HttpStatus.OK);
     }
 
     @GetMapping("/api/profil")

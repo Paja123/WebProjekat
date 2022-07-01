@@ -2,6 +2,7 @@ package vezbe.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vezbe.demo.dto.RestoranImeDto;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @RestController
+@CrossOrigin("http://localhost:8080")
+@RequestMapping(value = "/api/")
 public class PorudzbinaRestController {
 
     @Autowired
@@ -64,7 +67,10 @@ public class PorudzbinaRestController {
         return ResponseEntity.ok(porudzbinaService.getAll());
 
     }
-    @PostMapping("/api/dodaj-u-korpu")
+    @PostMapping(
+            value="dodaj-u-korpu",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Porudzbina> dodajUKorpu(@RequestBody KorpaDto korpaDto, HttpSession session){
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
@@ -78,7 +84,8 @@ public class PorudzbinaRestController {
 
         Porudzbina porudzbina = porudzbinaService.findPorduzbinaUSastavljanju(kupac);
 
-        return ResponseEntity.ok(porudzbinaService.kreirajStavkuPorudzbine(korpaDto.getArtikal(), korpaDto.getKolicina(), porudzbina));
+        return new ResponseEntity<>(porudzbinaService.kreirajStavkuPorudzbine(korpaDto.getArtikal(), korpaDto.getKolicina(), porudzbina), HttpStatus.OK);
+
 
     }
     @PostMapping("/api/ukloni-iz-korpe")
@@ -117,7 +124,7 @@ public class PorudzbinaRestController {
         }
 
     }
-    @PutMapping("/api/menadezer/promeni-status/{id}")//GRESKA U KUCANJU
+    @PutMapping("/api/menadzer/promeni-status/{id}")
     public ResponseEntity<Porudzbina> uPripremi(@PathVariable(name = "id") String id, HttpSession session){
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
         if (loggedKorisnik == null){
