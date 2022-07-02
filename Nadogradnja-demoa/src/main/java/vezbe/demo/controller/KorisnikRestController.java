@@ -37,12 +37,11 @@ public class KorisnikRestController {
             return new ResponseEntity<>(new KorisnikDto(), HttpStatus.OK);
         }
         Korisnik loggedKorisnik = korisnikService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
-        if (loggedKorisnik == null)
-            return new ResponseEntity<>(new KorisnikDto(), HttpStatus.OK);
-
+        if (loggedKorisnik == null){
+            return new ResponseEntity<>(new KorisnikDto(), HttpStatus.OK);}
         session.setAttribute("logovaniKorsinik", loggedKorisnik);
+
         KorisnikDto korisnikDto= new KorisnikDto(loggedKorisnik.getKorisnickoIme(), loggedKorisnik.getLozinka(), loggedKorisnik.getIme(), loggedKorisnik.getPrezime(), loggedKorisnik.getDatumRodjenja(), loggedKorisnik.getPol(), loggedKorisnik.getUloga());
-        System.out.println(korisnikDto.getUloga());
         return  new ResponseEntity<>(korisnikDto, HttpStatus.OK);
     }
 

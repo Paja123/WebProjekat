@@ -55,7 +55,7 @@ public class KupacRestController {
         Kupac kupac  = new Kupac(korisnikDto.getKorisnickoIme(), korisnikDto.getLozinka(), korisnikDto.getIme(), korisnikDto.getPrezime(),pol, date1);
         this.kupacService.save(kupac);
 
-        return  new ResponseEntity<>("Uspesna registracija!", HttpStatus.OK);
+        return  new ResponseEntity<>("", HttpStatus.OK);
 
     }
     @GetMapping("/api/sve-porudzbine")
