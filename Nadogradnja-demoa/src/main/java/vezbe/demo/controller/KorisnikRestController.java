@@ -47,7 +47,8 @@ public class KorisnikRestController {
         return  new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping("/api/profil")
+    @GetMapping(value = "profil",
+    produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Korisnik> getProfil(HttpSession session){
 
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");

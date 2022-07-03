@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vezbe.demo.dto.PorudzbinaDto;
 import vezbe.demo.dto.RestoranImeDto;
 import vezbe.demo.model.*;
 import vezbe.demo.service.PorudzbinaService;
@@ -23,8 +24,9 @@ public class PorudzbinaRestController {
     private PorudzbinaService porudzbinaService;
 
 
-    @GetMapping("/api/pregledPorudzbina")
-    public ResponseEntity<List<Porudzbina>> getPorudzbine(HttpSession session) {
+    @GetMapping(value="/pregled-porudzbina",
+    produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PorudzbinaDto>> getPorudzbine(HttpSession session) {
         List<Porudzbina> listaPorudzbina = new ArrayList<>();
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
         if (loggedKorisnik.getUloga() != Uloga.Menadzer) {
@@ -32,9 +34,9 @@ public class PorudzbinaRestController {
         }
 
         Restoran r = ((Menadzer) loggedKorisnik).getRestoran();
-        listaPorudzbina = porudzbinaService.getListaPorudzbina(r);
+        List<PorudzbinaDto> dtoList = porudzbinaService.getListaPorudzbina(r);
 
-        return ResponseEntity.ok(listaPorudzbina);
+        return ResponseEntity.ok(dtoList);
 
     }
 

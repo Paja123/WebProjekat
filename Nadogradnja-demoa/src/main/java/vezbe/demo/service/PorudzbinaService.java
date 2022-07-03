@@ -2,6 +2,7 @@ package vezbe.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vezbe.demo.dto.PorudzbinaDto;
 import vezbe.demo.model.*;
 import vezbe.demo.repository.PorudzbinaRepository;
 import java.util.*;
@@ -24,20 +25,28 @@ public class PorudzbinaService {
     DostavljacService dostavljacService;
 
 
-    public List<Porudzbina> getListaPorudzbina(Restoran restoran) {
+    public List<PorudzbinaDto> getListaPorudzbina(Restoran restoran) {
         List<Porudzbina> listaPorudzbina = new ArrayList<>();
         for (Porudzbina porudzbina : porudzbinaRepository.findAll()) {
             for (StavkaPorudzbine stavkaPorudzbine : porudzbina.getPoruceniArtikli()) {
                 for (Artikal artikal : restoran.getPonuda()) {
                     if (stavkaPorudzbine.getPoruceniArtikal().getId().equals(artikal.getId())) {
-                        listaPorudzbina.add(porudzbina);
-                        break;
+                        if(!listaPorudzbina.contains(porudzbina)) {
+                            listaPorudzbina.add(porudzbina);
+                            break;
+                        }
                     }
 
                 }
             }
         }
-        return listaPorudzbina;
+        List<PorudzbinaDto> dtoList = new ArrayList<>();
+        for(Porudzbina porudzbina: listaPorudzbina){
+            PorudzbinaDto dto = new PorudzbinaDto(porudzbina.getId().toString(), porudzbina.getCena(), porudzbina.getDatumIVreme().toString(), porudzbina.getStatus());
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
   public Set<Porudzbina> findCekaDostavljaca(){
         Set<Porudzbina> setp = new HashSet<>();
