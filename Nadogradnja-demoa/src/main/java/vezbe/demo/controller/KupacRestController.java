@@ -58,7 +58,9 @@ public class KupacRestController {
         return  new ResponseEntity<>("", HttpStatus.OK);
 
     }
-    @GetMapping("/api/sve-porudzbine")
+    @GetMapping(value="/sve-porudzbine",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<Set<Porudzbina>> sveProduzbine(HttpSession session){
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
 
@@ -73,7 +75,8 @@ public class KupacRestController {
             System.out.println("PRAZNA LISTA");
             ResponseEntity.noContent();
         }
-        return ResponseEntity.ok( kupacService.findAllPorudzbineByID(loggedKorisnik.getId()));
+//        return new ResponseEntity( kupacService.findAllPorudzbineByID(loggedKorisnik.getId()), HttpStatus.OK);
+        return new ResponseEntity( kupacService.findAllPorudzbineByID(loggedKorisnik.getId()), HttpStatus.OK);
 
     }
 }

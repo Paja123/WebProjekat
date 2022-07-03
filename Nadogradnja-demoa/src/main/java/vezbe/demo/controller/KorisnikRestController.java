@@ -32,17 +32,19 @@ public class KorisnikRestController {
             value="login",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<KorisnikDto> login(@RequestBody KorisnikDto loginDto, HttpSession session) throws Exception{
+    public ResponseEntity<LoginDto> login(@RequestBody KorisnikDto loginDto, HttpSession session) throws Exception{
         if(loginDto.getKorisnickoIme().isEmpty() || loginDto.getLozinka().isEmpty()){
-            return new ResponseEntity<>(new KorisnikDto(), HttpStatus.OK);
+            return new ResponseEntity<>(new LoginDto(), HttpStatus.OK);
         }
         Korisnik loggedKorisnik = korisnikService.login(loginDto.getKorisnickoIme(), loginDto.getLozinka());
         if (loggedKorisnik == null){
-            return new ResponseEntity<>(new KorisnikDto(), HttpStatus.OK);}
+            return new ResponseEntity<>(new LoginDto(), HttpStatus.OK);}
         session.setAttribute("logovaniKorsinik", loggedKorisnik);
 
         KorisnikDto korisnikDto= new KorisnikDto(loggedKorisnik.getKorisnickoIme(), loggedKorisnik.getLozinka(), loggedKorisnik.getIme(), loggedKorisnik.getPrezime(), loggedKorisnik.getDatumRodjenja(), loggedKorisnik.getPol(), loggedKorisnik.getUloga());
-        return  new ResponseEntity<>(korisnikDto, HttpStatus.OK);
+        LoginDto dto = new LoginDto(loggedKorisnik.getKorisnickoIme(), loggedKorisnik.getLozinka(), loggedKorisnik.getIme(), loggedKorisnik.getPrezime(), loggedKorisnik.getDatumRodjenja(), loggedKorisnik.getPol(), loggedKorisnik.getUloga());
+       dto.setSessionId(session.getId());
+        return  new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("/api/profil")

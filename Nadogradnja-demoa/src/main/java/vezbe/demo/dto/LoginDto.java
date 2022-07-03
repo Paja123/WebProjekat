@@ -1,29 +1,92 @@
 package vezbe.demo.dto;
 
-import vezbe.demo.model.*;
+import vezbe.demo.model.Pol;
+import vezbe.demo.model.Uloga;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import static javax.persistence.EnumType.STRING;
 
 public class LoginDto {
-
     private String korisnickoIme;
-
-    private String lozinka;
+    private  String lozinka;
+    private String ime;
+    private String prezime;
+    private String datumRodjenja;
+    private String pol;
+    private String uloga;
+    private String sessionId;
 
     public LoginDto() {
     }
 
-    public LoginDto(String korisnickoIme, String lozinka) {
+    public LoginDto(String korisnickoIme, String lozinka, String ime, String prezime, String datumRodjenja,String pol,String uloga) {
         this.korisnickoIme = korisnickoIme;
         this.lozinka = lozinka;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.datumRodjenja = datumRodjenja;
+        this.pol = pol;
+        this.uloga = uloga;
+    }
+    public LoginDto(String korisnickoIme, String lozinka, String ime, String prezime, Date datumRodjenja,Pol pol,Uloga uloga) {
+
+        this.korisnickoIme = korisnickoIme;
+        this.lozinka = lozinka;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.datumRodjenja = datumRodjenja.toString();
+        this.pol = pol.name();
+        this.uloga = uloga.name();
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public String getLozinka() {
+        return lozinka;
+    }
+
+    public void setLozinka(String lozinka) {
+        this.lozinka = lozinka;
+    }
+
+    public String getIme() {
+        return ime;
+    }
+
+    public void setIme(String ime) {
+        this.ime = ime;
+    }
+
+    public String getPrezime() {
+        return prezime;
+    }
+
+    public void setPrezime(String prezime) {
+        this.prezime = prezime;
+    }
+
+    public String getDatumRodjenja() {
+        return datumRodjenja;
+    }
+
+    public void setDatumRodjenja(String datumRodjenja) {
+        this.datumRodjenja = datumRodjenja;
+    }
+
+    public String getPol() {
+        return pol;
+    }
+
+    public void setPol(String pol) {
+        this.pol = pol;
     }
 
     public String getKorisnickoIme() {
@@ -34,11 +97,11 @@ public class LoginDto {
         this.korisnickoIme = korisnickoIme;
     }
 
-    public String getLozinka() {
-        return lozinka;
+    public String getUloga() {
+        return uloga;
     }
 
-    public void setLozinka(String lozinka) {
-        this.lozinka = lozinka;
+    public void setUloga(String uloga) {
+        this.uloga = uloga;
     }
 }

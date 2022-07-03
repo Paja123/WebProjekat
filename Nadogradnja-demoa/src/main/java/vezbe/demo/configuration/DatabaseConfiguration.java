@@ -96,13 +96,13 @@ public class DatabaseConfiguration {
         Artikal artikal11= new Artikal("naziv11", 500, TipArtikla.Jelo, 10, "opis11");
         artikalRepository.save(artikal11);
 
-        StavkaPorudzbine stavkaPorudzbine1 = new StavkaPorudzbine(artikal1,100);
-        StavkaPorudzbine stavkaPorudzbine2 = new StavkaPorudzbine(artikal2,100);
-        StavkaPorudzbine stavkaPorudzbine3 = new StavkaPorudzbine(artikal3,100);
-        StavkaPorudzbine stavkaPorudzbine4 = new StavkaPorudzbine(artikal4,100);
-        StavkaPorudzbine stavkaPorudzbine5 = new StavkaPorudzbine(artikal5,100);
-        StavkaPorudzbine stavkaPorudzbine6 = new StavkaPorudzbine(artikal6,100);
-        StavkaPorudzbine stavkaPorudzbine7 = new StavkaPorudzbine(artikal1,100);
+        StavkaPorudzbine stavkaPorudzbine1 = new StavkaPorudzbine(artikal1,1);
+        StavkaPorudzbine stavkaPorudzbine2 = new StavkaPorudzbine(artikal2,2);
+        StavkaPorudzbine stavkaPorudzbine3 = new StavkaPorudzbine(artikal3,3);
+        StavkaPorudzbine stavkaPorudzbine4 = new StavkaPorudzbine(artikal4,4);
+        StavkaPorudzbine stavkaPorudzbine5 = new StavkaPorudzbine(artikal5,5);
+        StavkaPorudzbine stavkaPorudzbine6 = new StavkaPorudzbine(artikal6,6);
+        StavkaPorudzbine stavkaPorudzbine7 = new StavkaPorudzbine(artikal1,7);
     /*    StavkaPorudzbine stavkaPorudzbine8 = new StavkaPorudzbine(artikal8,100);
         StavkaPorudzbine stavkaPorudzbine9 = new StavkaPorudzbine(artikal9,100);
         StavkaPorudzbine stavkaPorudzbine10 = new StavkaPorudzbine(artikal10,100);
@@ -186,13 +186,13 @@ public class DatabaseConfiguration {
         porudzbina2.setPoruceniArtikli(lista_artikala2);
         porudzbina2.setRestoran(restoran);
         porudzbina2.setDatumIVreme(date1);
-        porudzbina2.setCena(10000);
+        porudzbina2.setCena(2000);
         porudzbina2.setKupac(kupac2);
         porudzbina2.setStatus(StatusPorudzbine.Obrada);
         porudzbinaRepository.save(porudzbina2);
         kupacRepository.save(kupac2);
         kupac2.getListaPorudzbina().add(porudzbina2);
-        Porudzbina porudzbina = new Porudzbina( lista_artikala, restoran, date1 , 123000,kupac2, StatusPorudzbine.CekaDostavljača);
+        Porudzbina porudzbina = new Porudzbina( lista_artikala, restoran, date1 , 5000,kupac2, StatusPorudzbine.CekaDostavljača);
         porudzbinaRepository.save(porudzbina);
         kupacRepository.save(kupac2);
         Date date = new Date();
