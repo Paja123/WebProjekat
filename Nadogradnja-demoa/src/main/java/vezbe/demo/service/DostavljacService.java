@@ -31,8 +31,8 @@ public class DostavljacService {
         return dostavljacRepository.findAll();
     }
 
-    public Dostavljac save(Dostavljac dostavljac){
-        return dostavljacRepository.save(dostavljac);
+    public void save(Dostavljac dostavljac){
+                dostavljacRepository.save(dostavljac);
     }
 
     public void delete(Dostavljac dostavljac){dostavljacRepository.delete(dostavljac);}

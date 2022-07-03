@@ -8,6 +8,7 @@ import vezbe.demo.dto.DostavljacDto;
 import vezbe.demo.dto.MenadzerDto;
 import vezbe.demo.model.*;
 import vezbe.demo.service.DostavljacService;
+import vezbe.demo.service.KorisnikService;
 import vezbe.demo.service.MenadzerService;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
@@ -18,31 +19,38 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@RequestMapping(value = "/api/")
+@CrossOrigin(origins = "http://localhost:8080")
 public class DostavljacRestController {
 
+    private final DostavljacService dostavljacService;
+
     @Autowired
-    private DostavljacService dostavljacService;
+    public DostavljacRestController(DostavljacService dostavljacService) {
+        this.dostavljacService = dostavljacService;
+    }
 
 
-    @PostMapping("/api/kreiraj-dostavljaca")
+
+    @PostMapping("kreiraj-dostavljaca")
     public ResponseEntity<String> kreirajDostavljaca(@RequestBody DostavljacDto dostavljacDto, HttpSession session) throws ParseException {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
         if (loggedKorisnik == null){
-            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Forbidden", HttpStatus.OK);
         }
         if(loggedKorisnik.getUloga()!= Uloga.Admin){
-            return new ResponseEntity("Nemate dozvolu za ovu funkciju", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Nemate dozvolu za ovu funkciju", HttpStatus.OK);
         }
         String sDate1=dostavljacDto.getDatumRodjenja();
         Date date1= null;
-        date1 = new SimpleDateFormat("yyyy/dd/MM").parse(sDate1);
+        date1 = new SimpleDateFormat("yyyy-MM-dd").parse(sDate1);
 
         Pol pol = Pol.valueOf(dostavljacDto.getPol());
 
         Dostavljac dostavljac  = new Dostavljac(dostavljacDto.getKorisnickoIme(), dostavljacDto.getLozinka(), dostavljacDto.getIme(), dostavljacDto.getPrezime(),pol, date1);
         this.dostavljacService.save(dostavljac);
 
-        return ResponseEntity.ok("Uspesno kreiranje dostavljaca!");
+        return new ResponseEntity<>("", HttpStatus.OK);
 
     }
 

@@ -2,10 +2,12 @@ package vezbe.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vezbe.demo.dto.MenadzerDto;
 import vezbe.demo.model.*;
+import vezbe.demo.service.DostavljacService;
 import vezbe.demo.service.MenadzerService;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
@@ -15,14 +17,20 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/api/")
+@CrossOrigin(origins = "http://localhost:8080")
 public class MenadzerRestController {
 
+    private final MenadzerService menadzerService;
+
     @Autowired
-    private MenadzerService menadzerService;
+    public MenadzerRestController(MenadzerService menadzerService) {
+        this.menadzerService = menadzerService;
+    }
 
 
-
-    @PostMapping("/api/kreiraj-menadzera")
+    @PostMapping(value = "kreiraj-menadzera"
+    )
     public ResponseEntity<String> kreirajMenadzera(@RequestBody MenadzerDto menadzerDto, HttpSession session) throws ParseException {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
 
@@ -35,7 +43,7 @@ public class MenadzerRestController {
 
         String sDate1=menadzerDto.getDatumRodjenja();
         Date date1= null;
-        date1 = new SimpleDateFormat("yyyy/dd/MM").parse(sDate1);
+        date1 = new SimpleDateFormat("yyyy-MM-dd").parse(sDate1);
 
         Pol pol = Pol.valueOf(menadzerDto.getPol());
 
