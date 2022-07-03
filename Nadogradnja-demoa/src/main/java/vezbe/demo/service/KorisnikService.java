@@ -2,6 +2,7 @@ package vezbe.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vezbe.demo.dto.KorisnikDto;
 import vezbe.demo.model.*;
 import vezbe.demo.repository.KorisnikRepository;
 
@@ -29,9 +30,16 @@ public class KorisnikService {
         return korisnik;
 
     }
-    public List<Korisnik> findAll(){
-        return korisnikRepository.findAll();
+    public List<KorisnikDto> findAll(){
+        List<KorisnikDto> listaKorisnika= new ArrayList<>();
+        for(Korisnik korisnik: korisnikRepository.findAll()){
+            KorisnikDto korisnikDto = new KorisnikDto(korisnik);
+            listaKorisnika.add(korisnikDto);
+        }
+        return listaKorisnika;
     }
+
+
 
 
 }

@@ -1,5 +1,6 @@
 package vezbe.demo.dto;
 
+import vezbe.demo.model.Korisnik;
 import vezbe.demo.model.Pol;
 import vezbe.demo.model.Uloga;
 
@@ -9,6 +10,7 @@ import java.util.Date;
 import static javax.persistence.EnumType.STRING;
 
 public class KorisnikDto {
+
     private String korisnickoIme;
     private  String lozinka;
     private String ime;
@@ -18,6 +20,15 @@ public class KorisnikDto {
     private String uloga;
 
     public KorisnikDto() {
+    }
+    public KorisnikDto(Korisnik korisnik) {
+        this.korisnickoIme = korisnik.getKorisnickoIme();
+        this.lozinka = korisnik.getLozinka();
+        this.ime = korisnik.getIme();
+        this.prezime = korisnik.getPrezime();
+        this.datumRodjenja = korisnik.getDatumRodjenja().toString();
+        this.pol = korisnik.getPol().toString();
+        this.uloga = korisnik.getUloga().toString();
     }
 
     public KorisnikDto(String korisnickoIme, String lozinka, String ime, String prezime, String datumRodjenja,String pol,String uloga) {

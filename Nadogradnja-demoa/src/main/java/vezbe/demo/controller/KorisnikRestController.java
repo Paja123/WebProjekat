@@ -61,15 +61,16 @@ public class KorisnikRestController {
         return ResponseEntity.ok(loggedKorisnik);
 
     }
-    @GetMapping("/api/korisnici")
-    public ResponseEntity<List<Korisnik>> getSveKorisnike(HttpSession session){
+    @GetMapping(value = "korisnici",
+    produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<KorisnikDto>> getSveKorisnike(HttpSession session){
         List<Korisnik> listaKorisnika = new ArrayList<>();
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("logovaniKorsinik");
         if(loggedKorisnik.getUloga()!=Uloga.Admin){
             return new ResponseEntity("Nemate pristupa ovim podacima", HttpStatus.BAD_REQUEST);
         }
-        listaKorisnika =  korisnikService.findAll();
-        return ResponseEntity.ok(listaKorisnika);
+        List<KorisnikDto> dtoList =  korisnikService.findAll();
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
 
     }
 }
