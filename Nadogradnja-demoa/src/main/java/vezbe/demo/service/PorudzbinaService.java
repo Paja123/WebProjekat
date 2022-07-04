@@ -48,11 +48,12 @@ public class PorudzbinaService {
 
         return dtoList;
     }
-  public Set<Porudzbina> findCekaDostavljaca(){
-        Set<Porudzbina> setp = new HashSet<>();
+  public Set<PorudzbinaDto> findCekaDostavljaca(){
+        Set<PorudzbinaDto> setp = new HashSet<>();
         for(Porudzbina porudzbina: porudzbinaRepository.findAll()){
             if(porudzbina.getStatus().equals(StatusPorudzbine.CekaDostavljača)){
-                setp.add(porudzbina);
+                PorudzbinaDto porudzbinaDto = new PorudzbinaDto(porudzbina.getUUID().toString(),porudzbina.getCena(), porudzbina.getDatumIVreme().toString(), porudzbina.getStatus());
+                setp.add(porudzbinaDto);
             }
         }
         return setp;
@@ -198,11 +199,10 @@ public class PorudzbinaService {
         listaPorudzbina = porudzbinaRepository.findAll();
         for(Porudzbina porudzbina: listaPorudzbina) {
             if (porudzbina.getStatus().equals(StatusPorudzbine.CekaDostavljača)) {
-                p = porudzbina;
-                p.setStatusPorudzbine(StatusPorudzbine.UTransportu);
-                porudzbinaRepository.save(p);
-                dostavljac.getPorudzbineZaDostavu().add(p);
-                dostavljacService.save(dostavljac);
+//                p = porudzbina;
+                porudzbina.setStatusPorudzbine(StatusPorudzbine.UTransportu);
+                porudzbinaRepository.save(porudzbina);
+                dostavljacService.addCondition(dostavljac,porudzbina);
                 return p;
             } else if (porudzbina.getStatus().equals(StatusPorudzbine.UTransportu)) {
                 for (Porudzbina porudzbina1 : dostavljacService.findAllById(dostavljac.getId())) {
@@ -219,7 +219,12 @@ public class PorudzbinaService {
                 }
             }
         }
+//        Set<Porudzbina> ispis = new HashSet<>();
+//        for(Porudzbina porudzbinaL p)
         return p;
+    }
+    public Dostavljac findDostavljac(String korisnickoIme){
+        return dostavljacService.findDostavljac(korisnickoIme);
     }
 
 

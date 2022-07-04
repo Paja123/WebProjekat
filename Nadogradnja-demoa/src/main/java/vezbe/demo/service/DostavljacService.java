@@ -2,10 +2,7 @@ package vezbe.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vezbe.demo.model.Dostavljac;
-import vezbe.demo.model.Kupac;
-import vezbe.demo.model.Menadzer;
-import vezbe.demo.model.Porudzbina;
+import vezbe.demo.model.*;
 import vezbe.demo.repository.DostavljacRepository;
 import vezbe.demo.repository.MenadzerRepository;
 
@@ -39,5 +36,34 @@ public class DostavljacService {
 
     public Set<Porudzbina> findAllById(Long id){
         return  dostavljacRepository.getById(id).getPorudzbineZaDostavu();
+    }
+
+    public void addPorudzbina(Dostavljac dostavljac, Porudzbina porudzbina){
+//        for(Porudzbina porudzbina1: dostavljac.getPorudzbineZaDostavu()){
+//            if(porudzbina1.getUUID().equals(porudzbina.getUUID())){
+//                dostavljac.getPorudzbineZaDostavu().remove(porudzbina1);
+//            }
+//        }
+        dostavljac.getPorudzbineZaDostavu().add(porudzbina);
+        dostavljacRepository.save(dostavljac);
+    }
+    public Dostavljac findDostavljac(String korisnickoIme){
+        for(Dostavljac dostavljac: dostavljacRepository.findAll()){
+            if(dostavljac.getKorisnickoIme().equals(korisnickoIme)){
+                return dostavljac;
+            }
+        }
+        return  null;
+    }
+    public void addCondition(Dostavljac dostavljac, Porudzbina porudzbina){
+        for(Porudzbina p: dostavljac.getPorudzbineZaDostavu()){
+            if(p.getUUID().equals(porudzbina.getUUID())){
+                p.setStatusPorudzbine(StatusPorudzbine.UTransportu);
+                dostavljacRepository.save(dostavljac);
+                return;
+            }
+        }
+        dostavljac.getPorudzbineZaDostavu().add(porudzbina);
+        dostavljacRepository.save(dostavljac);
     }
 }
